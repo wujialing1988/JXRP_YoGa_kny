@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20120529" releaseVersion="7.0.0">
+<TableDataMap>
+<TableData name="tw" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="twId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select ts.idx,
+       ts.station_code,
+       ts.station_name,
+       ts.station_class,
+       count(ts.train_access_account_idx) as train_count,
+       sum(js_time) as time_count
+  from (select a.idx,
+               a.station_code,
+               a.station_name,
+               a.station_class,
+               b.train_access_account_idx,
+               b.start_time,
+               b.end_time,
+               round((b.end_time - b.start_time) * 1440, 2) as js_time
+          from twt_site_station a
+          left join twt_train_position_his b on a.idx = b.equipguid) ts
+where ts.idx='${twId}'
+ group by ts.idx, ts.station_code, ts.station_name, ts.station_class]]></Query>
+</TableData>
+<TableData name="twinfo" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="str"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="condition"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="twId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[SELECT H.START_TIME,
+       H.END_TIME,
+       round((H.end_time - H.start_time) * 1440, 2) as js_time,
+       A.TRAIN_TYPE_SHORTNAME,
+       A.TRAIN_NO
+  FROM TWT_Train_Position_HIS H, TWT_Train_Access_Account A
+ WHERE H.TRAIN_ACCESS_ACCOUNT_IDX = A.IDX and h.equipguid='${twId}'
+${if(len(str) == 0, "", " and round((H.end_time - H.start_time) * 1440, 2) "+condition+str)}]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<RowHeight defaultValue="723900">
+<![CDATA[723900,1219200,723900,723900,723900,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[4191000,2743200,2743200,2743200,2743200,2743200,4648200,3086100,2743200,2743200,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="0" r="0" s="0">
+<O>
+<![CDATA[台位编码：]]></O>
+<Expand/>
+</C>
+<C c="1" r="0" cs="2" s="1">
+<O t="DSColumn">
+<Attributes dsName="tw" columnName="STATION_CODE"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="0" s="0">
+<O>
+<![CDATA[台位名称：]]></O>
+<Expand/>
+</C>
+<C c="4" r="0" cs="2" s="1">
+<O t="DSColumn">
+<Attributes dsName="tw" columnName="STATION_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="6" r="0" s="0">
+<O>
+<![CDATA[台位类型：]]></O>
+<Expand/>
+</C>
+<C c="7" r="0" s="1">
+<O t="DSColumn">
+<Attributes dsName="tw" columnName="STATION_CLASS"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="0" r="1" s="0">
+<O>
+<![CDATA[总停时（分钟）：]]></O>
+<Expand/>
+</C>
+<C c="1" r="1" cs="2" s="1">
+<O t="DSColumn">
+<Attributes dsName="tw" columnName="TIME_COUNT"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="1" s="0">
+<O>
+<![CDATA[机车数：]]></O>
+<Expand/>
+</C>
+<C c="4" r="1" cs="2" s="1">
+<O t="DSColumn">
+<Attributes dsName="tw" columnName="TRAIN_COUNT"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="6" r="1" s="0">
+<O>
+<![CDATA[平均停时（分钟）：]]></O>
+<Expand/>
+</C>
+<C c="7" r="1" s="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=B2/E2]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="0" r="3" cs="2" s="3">
+<O>
+<![CDATA[上台位时间]]></O>
+<Expand/>
+</C>
+<C c="2" r="3" cs="2" s="3">
+<O>
+<![CDATA[下台位时间]]></O>
+<Expand/>
+</C>
+<C c="4" r="3" cs="2" s="3">
+<O>
+<![CDATA[停时（分钟）]]></O>
+<Expand/>
+</C>
+<C c="6" r="3" s="3">
+<O>
+<![CDATA[车型]]></O>
+<Expand/>
+</C>
+<C c="7" r="3" s="3">
+<O>
+<![CDATA[车号]]></O>
+<Expand/>
+</C>
+<C c="0" r="4" cs="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="twinfo" columnName="START_TIME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="4" cs="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="twinfo" columnName="END_TIME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="4" r="4" cs="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="twinfo" columnName="JS_TIME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="6" r="4" s="4">
+<O t="DSColumn">
+<Attributes dsName="twinfo" columnName="TRAIN_TYPE_SHORTNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="7" r="4" s="4">
+<O t="DSColumn">
+<Attributes dsName="twinfo" columnName="TRAIN_NO"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<Margin top="986400" left="2743200" bottom="986400" right="2743200"/>
+</PaperSetting>
+</ReportSettings>
+</ReportAttrSet>
+</Report>
+<ReportParameterAttr>
+<Attributes showWindow="true" delayPlaying="false" windowPosition="1" align="0"/>
+<PWTitle>
+<![CDATA[参数]]></PWTitle>
+<ParameterUI class="com.fr.report.parameter.FormParameterUI">
+<Layout class="com.fr.form.ui.container.WAbsoluteLayout">
+<WidgetName name="para"/>
+<WidgetAttr/>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="label0"/>
+<WidgetAttr/>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<widgetValue>
+<O>
+<![CDATA[停时（分钟）：]]></O>
+</widgetValue>
+</InnerWidget>
+<BoundsAttr x="39" y="16" width="103" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.ComboBox">
+<WidgetName name="condition"/>
+<WidgetAttr/>
+<allowBlank>
+<![CDATA[false]]></allowBlank>
+<Dictionary class="com.fr.data.impl.CustomDictionary">
+<CustomDictAttr>
+<Dict key="&gt;=" value="&gt;="/>
+<Dict key="&lt;=" value="&lt;="/>
+</CustomDictAttr>
+</Dictionary>
+<widgetValue>
+<O>
+<![CDATA[>=]]></O>
+</widgetValue>
+</InnerWidget>
+<BoundsAttr x="145" y="15" width="80" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.TextEditor">
+<WidgetName name="str"/>
+<WidgetAttr/>
+<TextAttr/>
+<widgetValue>
+<O>
+<![CDATA[]]></O>
+</widgetValue>
+</InnerWidget>
+<BoundsAttr x="237" y="16" width="80" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.report.web.ui.impl.form.FormSubmitButton">
+<WidgetName name="formSubmit0"/>
+<WidgetAttr/>
+<Text>
+<![CDATA[查询]]></Text>
+<Hotkeys>
+<![CDATA[enter]]></Hotkeys>
+</InnerWidget>
+<BoundsAttr x="377" y="15" width="80" height="21"/>
+</Widget>
+<LCAttr vgap="0" hgap="0"/>
+</Layout>
+<DesignAttr width="718" height="50"/>
+</ParameterUI>
+</ReportParameterAttr>
+<StyleList>
+<Style horizontal_alignment="4" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="2" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="2" imageLayout="1">
+<Format class="java.text.DecimalFormat">
+<![CDATA[#0.00]]></Format>
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

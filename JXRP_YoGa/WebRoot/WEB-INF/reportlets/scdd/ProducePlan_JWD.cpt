@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20120529" releaseVersion="7.0.0">
+<TableDataMap>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="idx"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select t.* from SCDD_Train_Enforce_Plan t 
+where t.record_status=0 and t.idx = '${idx}']]></Query>
+</TableData>
+<TableData name="ds2" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="idx"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select t.idx,t.plan_status,t.train_type_shortname,t.train_no,
+       t.b_name,t.b_shortname,t.d_name,t.d_shortname,
+       t.repair_class_name,t.repair_time_name,t.work_number,
+       t.undertake_orgname,
+       to_char(t.plan_start_date,'yyyy-MM-dd') plan_start_date,
+       to_char(t.plan_end_date,'yyyy-MM-dd') plan_end_date,
+       t.remarks
+from SCDD_Train_Enforce_Plan_Detail t 
+where t.record_status=0 and t.train_enforce_plan_idx = '${idx}']]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR F="0" T="5"/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<RowHeight defaultValue="723900">
+<![CDATA[723900,533400,342900,723900,723900,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[1828800,2476500,2514600,2362200,1790700,1562100,2400300,2286000,3238500,3352800,4305300,6477000,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="0" r="0" cs="11" rs="2" s="0">
+<O>
+<![CDATA[车辆检修计划]]></O>
+<Expand/>
+</C>
+<C c="11" r="0">
+<Expand/>
+</C>
+<C c="11" r="1">
+<Expand/>
+</C>
+<C c="0" r="3" cs="2" s="1">
+<O>
+<![CDATA[计划名称：]]></O>
+<Expand/>
+</C>
+<C c="2" r="3" cs="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="PLAN_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="4" r="3" cs="2" s="1">
+<O>
+<![CDATA[计划开始日期：]]></O>
+<Expand/>
+</C>
+<C c="6" r="3" cs="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="PLAN_START_DATE"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="9" r="3" s="1">
+<O>
+<![CDATA[计划结束日期：]]></O>
+<Expand/>
+</C>
+<C c="10" r="3" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="PLAN_END_DATE"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="0" r="4" cs="2" s="1">
+<O>
+<![CDATA[编制人：]]></O>
+<Expand/>
+</C>
+<C c="2" r="4" cs="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="PLAN_PERSON_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="4" r="4" cs="2" s="1">
+<O>
+<![CDATA[编制日期：]]></O>
+<Expand/>
+</C>
+<C c="6" r="4" cs="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="PLAN_TIME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="9" r="4" s="1">
+<O>
+<![CDATA[编制单位：]]></O>
+<Expand/>
+</C>
+<C c="10" r="4" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="PLAN_ORGNAME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="0" r="5" s="3">
+<O>
+<![CDATA[序号]]></O>
+<Expand/>
+</C>
+<C c="1" r="5" s="3">
+<O>
+<![CDATA[计划状态]]></O>
+<Expand/>
+</C>
+<C c="2" r="5" s="3">
+<O>
+<![CDATA[车型]]></O>
+<Expand/>
+</C>
+<C c="3" r="5" cs="2" s="3">
+<O>
+<![CDATA[车号]]></O>
+<Expand/>
+</C>
+<C c="5" r="5" cs="2" s="3">
+<O>
+<![CDATA[修程]]></O>
+<Expand/>
+</C>
+<C c="7" r="5" s="3">
+<O>
+<![CDATA[修次]]></O>
+<Expand/>
+</C>
+<C c="8" r="5" s="3">
+<O>
+<![CDATA[计划修车日期]]></O>
+<Expand/>
+</C>
+<C c="9" r="5" s="3">
+<O>
+<![CDATA[计划交车日期]]></O>
+<Expand/>
+</C>
+<C c="10" r="5" s="3">
+<O>
+<![CDATA[不良状态预报]]></O>
+<Expand/>
+</C>
+<C c="0" r="6" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=&B7]]></Attributes>
+</O>
+<Expand leftParentDefault="false" left="B7"/>
+</C>
+<C c="1" r="6" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="PLAN_STATUS"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Present class="com.fr.base.present.DictPresent">
+<Dictionary class="com.fr.data.impl.CustomDictionary">
+<CustomDictAttr>
+<Dict key="10" value="未执行"/>
+<Dict key="20" value="执行中"/>
+<Dict key="30" value="已完成"/>
+</CustomDictAttr>
+</Dictionary>
+</Present>
+<Expand dir="0"/>
+</C>
+<C c="2" r="6" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="TRAIN_TYPE_SHORTNAME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="6" cs="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="TRAIN_NO"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="5" r="6" cs="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="REPAIR_CLASS_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="7" r="6" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="REPAIR_TIME_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="8" r="6" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="PLAN_START_DATE"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="9" r="6" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="PLAN_END_DATE"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="10" r="6" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="REMARKS"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<PaperSize width="30240000" height="47520000"/>
+<Margin top="986400" left="2743200" bottom="986400" right="2743200"/>
+</PaperSetting>
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+</ReportAttrSet>
+</Report>
+<ReportParameterAttr>
+<Attributes showWindow="true" delayPlaying="true" windowPosition="1" align="0"/>
+<PWTitle>
+<![CDATA[参数]]></PWTitle>
+</ReportParameterAttr>
+<StyleList>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="120"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="4" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="2" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

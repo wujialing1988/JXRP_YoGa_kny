@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20120529" releaseVersion="7.0.0">
+<TableDataMap>
+<TableData name="allPlan" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="nowDate"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=TODAY()]]></Attributes>
+</O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[ ${if(nowDate > NOW()-1,"
+	select n.work_station_belong_team,
+       n.work_station_belong_team_name,
+       p.train_type_shortname || p.train_no || ' ' || p.repair_class_name || p.repair_time_name as trainInfo,
+       n.idx,
+       n.node_name,
+       to_char(n.real_begin_time,'yyyy-MM-dd HH24:mi:ss') real_begin_time,
+       to_char(n.real_end_time,'yyyy-MM-dd HH24:mi:ss') real_end_time,
+       d.delay_reason,
+       r.rate,
+      decode(n.status,'COMPLETE','1','COMPLETED','1','RUNNING','0','NOTSTARTED','0') status
+        from jxgc_job_process_node n 
+        left join (
+             select d.node_idx,d.rdp_idx,WM_CONCAT(d.delay_reason) as delay_reason from JXGC_Node_Case_Delay d
+where d.record_status = 0 and d.rdp_idx is not null and d.node_idx is not null and d.delay_reason is not null
+group by d.node_idx,d.rdp_idx 
+        ) d on n.node_idx = d.node_idx and n.work_plan_idx = d.rdp_idx 
+left join jxgc_train_work_plan p on n.work_plan_idx = p.idx 
+        left join (
+             select n.work_station_belong_team,round(sum(case when n.status = 'COMPLETE' or n.status = 'COMPLETED' then 1 else 0 end)/count(1),2)*100 as rate from jxgc_job_process_node n where n.is_leaf = 1 and n.record_status = 0 and n.work_station_belong_team is not null and n.status <> 'TERMINATED'
+            and n.plan_begin_time <= to_date('"+nowDate+" 23:59:59','yyyy-MM-dd HH24:mi:ss')
+            and n.plan_end_time >= to_date('"+nowDate+" 00:00:00','yyyy-MM-dd HH24:mi:ss')
+            group by n.work_station_belong_team 
+        ) r on r.work_station_belong_team = n.work_station_belong_team
+where n.is_leaf = 1 and n.record_status = 0 and n.work_station_belong_team is not null and n.status <> 'TERMINATED'
+and n.plan_begin_time <= to_date('"+nowDate+" 23:59:59','yyyy-MM-dd HH24:mi:ss')
+and n.plan_end_time >= to_date('"+nowDate+" 00:00:00','yyyy-MM-dd HH24:mi:ss')
+order by n.work_station_belong_team , decode(n.status,'COMPLETE',0,'COMPLETED','0','RUNNING',1,'NOTSTARTED',2),n.work_plan_idx
+","
+select 
+  n.work_station_belong_team,
+       n.work_station_belong_team_name,
+       n.node_name,
+       decode(n.status,'COMPLETE','1','COMPLETED','1','RUNNING','0','NOTSTARTED','0') status,
+       p.train_type_shortname || p.train_no || ' ' || p.repair_class_name || p.repair_time_name as trainInfo,
+       n.idx,
+       n.node_idx,
+       n.plan_begin_time,
+       n.plan_end_time,
+       to_char(n.real_begin_time,'yyyy-MM-dd HH24:mi:ss') real_begin_time,
+       to_char(n.real_end_time,'yyyy-MM-dd HH24:mi:ss') real_end_time,
+       n.delay_reason,
+       r.rate
+ from 
+JXGC_JOB_PROCESS_NODES n
+left join jxgc_train_work_plan p on n.work_plan_idx = p.idx 
+left join(
+     select n.work_station_belong_team,round(sum(case when n.status = 'COMPLETE' or n.status = 'COMPLETED' then 1 else 0 end)/count(1),2)*100 as rate 
+             from JXGC_JOB_PROCESS_NODES n where n.is_leaf = 1 and n.record_status = 0 and n.work_station_belong_team is not null and n.status <> 'TERMINATED'
+            and n.date_str = '"+nowDate+"'
+            group by n.work_station_belong_team
+) r on r.work_station_belong_team = n.work_station_belong_team
+where n.date_str = '"+nowDate+"' 
+order by n.work_station_belong_team , decode(n.status,'COMPLETE',0,'COMPLETED','0','RUNNING',1,'NOTSTARTED',2),n.work_plan_idx
+")}
+
+
+
+
+]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<RowHeight defaultValue="723900">
+<![CDATA[723900,723900,723900,723900,723900,876300,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[2743200,0,2160000,4648200,4032000,5040000,5040000,2743200,2819400,2743200,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="0" r="0" cs="11" rs="2" s="0">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=CONCATENATE(YEAR($nowDate), "年", MONTH($nowDate), "月", DAY($nowDate), "日", "生产任务进度统计")]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="0" r="2" cs="8">
+<Expand/>
+</C>
+<C c="0" r="3" s="1">
+<O>
+<![CDATA[班组]]></O>
+<Expand/>
+</C>
+<C c="1" r="3" s="1">
+<O>
+<![CDATA[完成率]]></O>
+<Expand/>
+</C>
+<C c="2" r="3" s="1">
+<O>
+<![CDATA[状态]]></O>
+<Expand/>
+</C>
+<C c="3" r="3" s="1">
+<O>
+<![CDATA[机车]]></O>
+<Expand/>
+</C>
+<C c="4" r="3" s="1">
+<O>
+<![CDATA[所属任务]]></O>
+<Expand/>
+</C>
+<C c="5" r="3" s="1">
+<O>
+<![CDATA[开工时间]]></O>
+<Expand/>
+</C>
+<C c="6" r="3" s="1">
+<O>
+<![CDATA[完工时间]]></O>
+<Expand/>
+</C>
+<C c="7" r="3" cs="2" s="1">
+<O>
+<![CDATA[延期原因]]></O>
+<Expand/>
+</C>
+<C c="9" r="3" cs="2" s="1">
+<O>
+<![CDATA[进度]]></O>
+<Expand/>
+</C>
+<C c="0" r="4" s="2">
+<O t="DSColumn">
+<Attributes dsName="allPlan" columnName="WORK_STATION_BELONG_TEAM_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="1" r="4" s="3">
+<O t="DSColumn">
+<Attributes dsName="allPlan" columnName="RATE"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="4" s="2">
+<O t="DSColumn">
+<Attributes dsName="allPlan" columnName="STATUS"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[if(len($$$) == 0,'',if($$$ == '1','已完成','未完成'))]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="4" s="2">
+<O t="DSColumn">
+<Attributes dsName="allPlan" columnName="TRAININFO"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="4" r="4" s="2">
+<O t="DSColumn">
+<Attributes dsName="allPlan" columnName="NODE_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="5" r="4" s="2">
+<O t="DSColumn">
+<Attributes dsName="allPlan" columnName="REAL_BEGIN_TIME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<CellGUIAttr adjustmode="2" showAsDefault="true"/>
+<CellPageAttr/>
+<CellInsertPolicy/>
+<Expand dir="0"/>
+</C>
+<C c="6" r="4" s="2">
+<O t="DSColumn">
+<Attributes dsName="allPlan" columnName="REAL_END_TIME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="7" r="4" cs="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="allPlan" columnName="DELAY_REASON"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="9" r="4" cs="2" s="4">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="<table width=" + B5 + "% border=0 cellspacing=0 cellpadding=0><tr><td bgcolor=#00AA55><div color=#00AA00 align=right>" + B5 + "%</div></td></tr></table>"]]></Attributes>
+</O>
+<CellGUIAttr showAsHTML="true"/>
+<CellPageAttr/>
+<CellInsertPolicy/>
+<Expand leftParentDefault="false" left="A5"/>
+</C>
+<C c="6" r="9">
+<Expand/>
+</C>
+<C c="9" r="16" s="5">
+<Expand/>
+</C>
+<C c="6" r="21" s="6">
+<Expand/>
+</C>
+<C c="4" r="22">
+<Expand/>
+</C>
+<C c="4" r="24">
+<Expand/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<Margin top="986400" left="2743200" bottom="986400" right="2743200"/>
+</PaperSetting>
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+</ReportAttrSet>
+</Report>
+<ReportParameterAttr>
+<Attributes showWindow="true" delayPlaying="false" windowPosition="1" align="0"/>
+<PWTitle>
+<![CDATA[参数]]></PWTitle>
+<ParameterUI class="com.fr.main.parameter.FormParameterUI">
+<Layout class="com.fr.form.ui.container.WAbsoluteLayout">
+<WidgetName name="para"/>
+<WidgetAttr/>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="LabelnowDate"/>
+<WidgetAttr/>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<widgetValue>
+<O>
+<![CDATA[日期:]]></O>
+</widgetValue>
+</InnerWidget>
+<BoundsAttr x="50" y="25" width="80" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.DateEditor">
+<WidgetName name="nowDate"/>
+<WidgetAttr/>
+<allowBlank>
+<![CDATA[false]]></allowBlank>
+<DateAttr/>
+<widgetValue>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=TODAY()]]></Attributes>
+</O>
+</widgetValue>
+</InnerWidget>
+<BoundsAttr x="130" y="25" width="128" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.report.web.ui.impl.form.FormSubmitButton">
+<WidgetName name="Search"/>
+<WidgetAttr/>
+<Text>
+<![CDATA[查询]]></Text>
+<Hotkeys>
+<![CDATA[enter]]></Hotkeys>
+</InnerWidget>
+<BoundsAttr x="306" y="25" width="80" height="21"/>
+</Widget>
+<LCAttr vgap="0" hgap="0"/>
+</Layout>
+<DesignAttr width="800" height="74"/>
+</ParameterUI>
+</ReportParameterAttr>
+<StyleList>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="112"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="2" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="2" textStyle="1" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72" foreground="-1"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="72" foreground="-1"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="2" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+</StyleList>
+</WorkBook>

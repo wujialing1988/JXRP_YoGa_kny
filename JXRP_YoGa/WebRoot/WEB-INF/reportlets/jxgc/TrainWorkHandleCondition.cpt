@@ -1,0 +1,1004 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20120529" releaseVersion="7.0.0">
+<TableDataMap>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="trainType"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="trainNo"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select p.idx,
+       p.train_type_shortname || p.train_no as "trainInfo",
+       p.repair_class_name || p.repair_time_name as "repairInfo",
+       (select count(c.idx)
+          from JXGC_Work_Card c
+         where c.rdp_idx = p.idx
+           and c.record_status = 0
+           and c.status in ('INITIALIZE', 'ONGOING', 'COMPLETE', 'FINISHED')) as "cardCount",
+       (select count(c.idx)
+          from JXGC_Work_Card c
+         where c.rdp_idx = p.idx
+           and c.record_status = 0
+           and c.status in ('INITIALIZE', 'ONGOING')) as "cardCount_wcl",
+       (select count(r.idx)
+          from JXGC_Work_Card c, JXGC_QC_Result r
+         where c.rdp_idx = p.idx
+           and c.idx = r.work_card_idx
+           and c.record_status = 0
+           and r.record_status = 0
+           and r.check_item_code = 'mutualCheckPerson'
+           and r.status in ('0', '1', '2')) as "mutualCheckPersonCount",
+       (select count(r.idx)
+          from JXGC_Work_Card c, JXGC_QC_Result r
+         where c.rdp_idx = p.idx
+           and c.idx = r.work_card_idx
+           and c.record_status = 0
+           and r.record_status = 0
+           and r.check_item_code = 'mutualCheckPerson'
+           and r.status in ('0', '1')) as "mutualCheckPersonCount_wcl",
+       (select count(r.idx)
+          from JXGC_Work_Card c, JXGC_QC_Result r
+         where c.rdp_idx = p.idx
+           and c.idx = r.work_card_idx
+           and c.record_status = 0
+           and r.record_status = 0
+           and r.check_item_code = 'workerHeaderCheckMust'
+           and r.status in ('0', '1', '2')) as "workerHeaderCheckMustCount",
+       (select count(r.idx)
+          from JXGC_Work_Card c, JXGC_QC_Result r
+         where c.rdp_idx = p.idx
+           and c.idx = r.work_card_idx
+           and c.record_status = 0
+           and r.record_status = 0
+           and r.check_item_code = 'workerHeaderCheckMust'
+           and r.status in ('0', '1')) as "workerHeaderCheckMustCount_wcl",
+       (select count(r.idx)
+          from JXGC_Work_Card c, JXGC_QC_Result r
+         where c.rdp_idx = p.idx
+           and c.idx = r.work_card_idx
+           and c.record_status = 0
+           and r.record_status = 0
+           and r.check_item_code = 'checkPersonMust'
+           and r.status in ('0', '1', '2')) as "checkPersonMustCount",
+       (select count(r.idx)
+          from JXGC_Work_Card c, JXGC_QC_Result r
+         where c.rdp_idx = p.idx
+           and c.idx = r.work_card_idx
+           and c.record_status = 0
+           and r.record_status = 0
+           and r.check_item_code = 'checkPersonMust'
+           and r.status in ('0', '1')) as "checkPersonMustCount_wcl",
+       (select count(t.idx)
+          from JXGC_Fault_Ticket t
+         where t.work_plan_idx = p.idx
+           and t.record_status = 0
+           and t.status in ('10', '20', '30')) as "faultCount",
+       (select count(t.idx)
+          from JXGC_Fault_Ticket t
+         where t.work_plan_idx = p.idx
+           and t.record_status = 0
+           and t.status in ('10', '20')) as "faultCount_wcl",
+       (select count(qt.idx)
+          from JXGC_Fault_QC_Result qt, JXGC_Fault_Ticket t
+         where t.work_plan_idx = p.idx
+           and t.idx = qt.relation_idx
+           and t.record_status = 0
+           and t.record_status = 0
+           and qt.status in ('0', '1', '2')) as "faultQCCount",
+       (select count(qt.idx)
+          from JXGC_Fault_QC_Result qt, JXGC_Fault_Ticket t
+         where t.work_plan_idx = p.idx
+           and t.idx = qt.relation_idx
+           and t.record_status = 0
+           and t.record_status = 0
+           and qt.status in ('0', '1')) as "faultQCCount_wcl"
+  from JXGC_Train_Work_Plan p
+ where p.record_status = 0
+   and p.work_plan_status = 'ONGOING' 
+   ${if(len(trainType) == 0, "", " and lower(p.train_type_shortname) like lower('%" + trainType + "%')") }
+   ${if(len(trainNo) == 0, "", " and p.train_no like '%" + trainNo + "%'") }]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR F="1" T="2"/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<RowHeight defaultValue="723900">
+<![CDATA[1008000,1440000,723900,1143000,723900,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[1866900,0,2857500,2971800,2171700,2476500,2362200,2324100,2362200,2743200,2743200,2743200,2133600,1943100,2590800,2667000,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="13" r="0" s="0">
+<O>
+<![CDATA[统计时间：]]></O>
+<Expand/>
+</C>
+<C c="14" r="0" cs="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=TODAY()]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="16" r="0">
+<Expand/>
+</C>
+<C c="0" r="1" rs="2" s="1">
+<O>
+<![CDATA[序号]]></O>
+<Expand/>
+</C>
+<C c="1" r="1" s="1">
+<O>
+<![CDATA[主键]]></O>
+<Expand/>
+</C>
+<C c="2" r="1" rs="2" s="1">
+<O>
+<![CDATA[车型车号]]></O>
+<Expand/>
+</C>
+<C c="3" r="1" rs="2" s="1">
+<O>
+<![CDATA[修程修次]]></O>
+<Expand/>
+</C>
+<C c="4" r="1" cs="2" s="1">
+<O>
+<![CDATA[作业工单]]></O>
+<Expand/>
+</C>
+<C c="6" r="1" cs="2" s="1">
+<O>
+<![CDATA[作业工单互验]]></O>
+<Expand/>
+</C>
+<C c="8" r="1" cs="2" s="1">
+<O>
+<![CDATA[作业工单工长必检]]></O>
+<Expand/>
+</C>
+<C c="10" r="1" cs="2" s="1">
+<O>
+<![CDATA[作业工单质检必检]]></O>
+<Expand/>
+</C>
+<C c="12" r="1" cs="2" s="1">
+<O>
+<![CDATA[提票工单]]></O>
+<Expand/>
+</C>
+<C c="14" r="1" cs="2" s="1">
+<O>
+<![CDATA[提票工单质量检验]]></O>
+<Expand/>
+</C>
+<C c="4" r="2" s="2">
+<O>
+<![CDATA[总计]]></O>
+<Expand/>
+</C>
+<C c="5" r="2" s="2">
+<O>
+<![CDATA[未处理]]></O>
+<Expand/>
+</C>
+<C c="6" r="2" s="2">
+<O>
+<![CDATA[总计]]></O>
+<Expand/>
+</C>
+<C c="7" r="2" s="2">
+<O>
+<![CDATA[未处理]]></O>
+<Expand/>
+</C>
+<C c="8" r="2" s="2">
+<O>
+<![CDATA[总计]]></O>
+<Expand/>
+</C>
+<C c="9" r="2" s="2">
+<O>
+<![CDATA[未处理]]></O>
+<Expand/>
+</C>
+<C c="10" r="2" s="2">
+<O>
+<![CDATA[总计]]></O>
+<Expand/>
+</C>
+<C c="11" r="2" s="2">
+<O>
+<![CDATA[未处理]]></O>
+<Expand/>
+</C>
+<C c="12" r="2" s="2">
+<O>
+<![CDATA[总计]]></O>
+<Expand/>
+</C>
+<C c="13" r="2" s="2">
+<O>
+<![CDATA[未处理]]></O>
+<Expand/>
+</C>
+<C c="14" r="2" s="2">
+<O>
+<![CDATA[总计]]></O>
+<Expand/>
+</C>
+<C c="15" r="2" s="2">
+<O>
+<![CDATA[未处理]]></O>
+<Expand/>
+</C>
+<C c="0" r="3" s="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=&B4]]></Attributes>
+</O>
+<Expand leftParentDefault="false" left="B4"/>
+</C>
+<C c="1" r="3" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="IDX"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="3" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="trainInfo"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="3" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="repairInfo"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="4" r="3" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="cardCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[IF(cardCount > 0, cardCount + "条", "")]]></Result>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="title"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C4 + "作业工单明细"]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jxgc/TrainWorkHandleCondition_card.cpt]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&idx="+B4]]></Attributes>
+</O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="0"/>
+</C>
+<C c="5" r="3" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="cardCount_wcl"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[IF(cardCount_wcl > 0, cardCount_wcl + "条", "")]]></Result>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jxgc/TrainWorkHandleCondition_card_wcl.cpt]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="title"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C4 + "未处理作业工单明细"]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&idx="+B4]]></Attributes>
+</O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="0"/>
+</C>
+<C c="6" r="3" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="mutualCheckPersonCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="title"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C4 + "作业工单质量检验明细"]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jxgc/TrainWorkHandleCondition_cardQC.cpt]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&idx="+B4+"&checkItemCode=mutualCheckPerson"]]></Attributes>
+</O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="0"/>
+</C>
+<C c="7" r="3" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="mutualCheckPersonCount_wcl"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jxgc/TrainWorkHandleCondition_cardQC_wcl.cpt]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="title"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C4 + "未处理作业工单质量检验明细"]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&idx="+B4+"&checkItemCode=mutualCheckPerson"]]></Attributes>
+</O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="0"/>
+</C>
+<C c="8" r="3" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="workerHeaderCheckMustCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="title"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C4 + "作业工单质量检验明细"]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jxgc/TrainWorkHandleCondition_cardQC.cpt]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&idx="+B4+"&checkItemCode=workerHeaderCheckMust"]]></Attributes>
+</O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="0"/>
+</C>
+<C c="9" r="3" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="workerHeaderCheckMustCount_wcl"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jxgc/TrainWorkHandleCondition_cardQC_wcl.cpt]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="title"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C4 + "未处理作业工单质量检验明细"]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&idx="+B4+"&checkItemCode=workerHeaderCheckMust"]]></Attributes>
+</O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="0"/>
+</C>
+<C c="10" r="3" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="checkPersonMustCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="title"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C4 + "作业工单质量检验明细"]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jxgc/TrainWorkHandleCondition_cardQC.cpt]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&idx="+B4+"&checkItemCode=checkPersonMust"]]></Attributes>
+</O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="0"/>
+</C>
+<C c="11" r="3" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="checkPersonMustCount_wcl"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jxgc/TrainWorkHandleCondition_cardQC_wcl.cpt]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="title"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C4 + "未处理作业工单质量检验明细"]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&idx="+B4+"&checkItemCode=checkPersonMust"]]></Attributes>
+</O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="0"/>
+</C>
+<C c="12" r="3" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="faultCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[IF(faultCount > 0, faultCount + "条", "")]]></Result>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="title"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C4 + "提票工单明细"]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jxgc/TrainWorkHandleCondition_fault.cpt]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&idx="+B4]]></Attributes>
+</O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="0"/>
+</C>
+<C c="13" r="3" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="faultCount_wcl"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Result>
+<![CDATA[IF(faultCount_wcl > 0, faultCount_wcl + "条", "")]]></Result>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="title"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C4 + "未处理提票工单明细"]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jxgc/TrainWorkHandleCondition_fault_wcl.cpt]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&idx="+B4]]></Attributes>
+</O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="0"/>
+</C>
+<C c="14" r="3" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="faultQCCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[IF(faultQCCount > 0, faultQCCount + "条", "")]]></Result>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="title"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C4 + "提票工单质量检验明细"]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jxgc/TrainWorkHandleCondition_faultQC.cpt]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&idx="+B4]]></Attributes>
+</O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="0"/>
+</C>
+<C c="15" r="3" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="faultQCCount_wcl"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Result>
+<![CDATA[IF(faultQCCount_wcl > 0, faultQCCount_wcl + "条", "")]]></Result>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jxgc/TrainWorkHandleCondition_faultQC_wcl.cpt]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="title"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C4 + "未处理提票工单质量检验明细"]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&idx="+B4]]></Attributes>
+</O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="0"/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<Margin top="986400" left="2743200" bottom="986400" right="2743200"/>
+</PaperSetting>
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+</ReportAttrSet>
+</Report>
+<ReportParameterAttr>
+<Attributes showWindow="true" delayPlaying="false" windowPosition="1" align="0"/>
+<PWTitle>
+<![CDATA[参数]]></PWTitle>
+<ParameterUI class="com.fr.report.parameter.FormParameterUI">
+<Layout class="com.fr.form.ui.container.WAbsoluteLayout">
+<WidgetName name="para"/>
+<WidgetAttr/>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="label0"/>
+<WidgetAttr/>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<widgetValue>
+<O>
+<![CDATA[车型：]]></O>
+</widgetValue>
+</InnerWidget>
+<BoundsAttr x="100" y="15" width="80" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.TextEditor">
+<WidgetName name="trainType"/>
+<WidgetAttr/>
+<TextAttr/>
+<widgetValue>
+<O>
+<![CDATA[]]></O>
+</widgetValue>
+</InnerWidget>
+<BoundsAttr x="180" y="15" width="120" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="label1"/>
+<WidgetAttr/>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<widgetValue>
+<O>
+<![CDATA[车号：]]></O>
+</widgetValue>
+</InnerWidget>
+<BoundsAttr x="353" y="15" width="80" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.TextEditor">
+<WidgetName name="trainNo"/>
+<WidgetAttr/>
+<TextAttr/>
+<widgetValue>
+<O>
+<![CDATA[]]></O>
+</widgetValue>
+</InnerWidget>
+<BoundsAttr x="433" y="15" width="120" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.report.web.ui.impl.form.FormSubmitButton">
+<WidgetName name="formSubmit0"/>
+<WidgetAttr/>
+<Text>
+<![CDATA[查询]]></Text>
+<Hotkeys>
+<![CDATA[enter]]></Hotkeys>
+</InnerWidget>
+<BoundsAttr x="641" y="15" width="86" height="21"/>
+</Widget>
+<LCAttr vgap="0" hgap="0"/>
+</Layout>
+<DesignAttr width="832" height="56"/>
+</ParameterUI>
+</ReportParameterAttr>
+<StyleList>
+<Style horizontal_alignment="4" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="80"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72" foreground="-16776961" underline="1"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72" foreground="-65536" underline="1"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

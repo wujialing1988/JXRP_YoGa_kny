@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="ydReport" basedir="."> 
+	<!-- 定义tomcat位置 -->
+	<property name="Tomcat" value="D:/Servers/apache-tomcat-5.5.20/" />
+	<!-- 定义项目所在tomcat位置 -->
+	<property name="TomcatWebApp" value="${Tomcat}webapps/ydReport" />
+
+	<!-- 定义所有项目原本地址 -->
+	<property name="WorkSpacePath" value="D:/Workspaces/MyEclipse/" />
+	<property name="JXRP_YoGa" value="JXRP_YoGa" />
+	<property name="JXRP_SM" value="JXRP_SM" />
+	<target name="删除ydReport">
+        <!--删除原来部署的文件-->
+        <delete dir="${TomcatWebApp}"/>
+        <mkdir dir="${TomcatWebApp}" />
+	</target>
+	<target name="拷贝JXRP_YoGa" depends="删除ydReport">
+	 	<copy todir="${TomcatWebApp}" overwrite="true">
+        	<fileset dir="${WorkSpacePath}${JXRP_YoGa}/WebRoot"/>
+        </copy>
+	</target>
+	<target name="拷贝JXRP_SM" depends="拷贝JXRP_YoGa">
+	 	<copy todir="${TomcatWebApp}" overwrite="true">
+        	<fileset dir="${WorkSpacePath}${JXRP_SM}/WebRoot"/>
+        </copy>
+	</target>
+</project>

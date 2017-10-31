@@ -1,0 +1,987 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20120529" releaseVersion="7.0.0">
+<TableDataMap>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="repairClassName"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="trainType"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[  select train_type_shortname,repair_class_name ,to_char(plan_start_date,'yyyymm') as months, count(*) as 计划台数 from v_scdd_plan_detail_search  where record_status=0  
+${if(len(trainType) == 0,""," and train_type_shortname like '%"+trainType+"%'")} 
+${if(len(repairClassName) == 0,""," and repair_class_name like '%"+repairClassName+"%'")} 
+ group by    train_type_shortname,repair_class_name,to_char(plan_start_date,'yyyymm') ]]></Query>
+</TableData>
+<TableData name="real" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="repairClassName"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="trainType"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[
+   select count(*),to_char(p.plan_begin_time,'yyyymm') as months_real from jxgc_train_work_plan p 
+ where p.work_plan_status!='TERMINATED' 
+${if(len(trainType) == 0,""," and p.train_type_shortname like '%"+trainType+"%'")} 
+${if(len(repairClassName) == 0,""," and p.repair_class_name like '%"+repairClassName+"%'")} 
+ group by    p.train_type_shortname,p.repair_class_name,to_char(p.plan_begin_time,'yyyymm') ]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<RowHeight defaultValue="723900">
+<![CDATA[876300,1066800,990600,1143000,1104900,1143000,1219200,1257300,1257300,1295400,1219200,1143000,1219200,1181100,1028700,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[2743200,3200400,3048000,3162300,0,2743200,2743200,2743200,2743200,2743200,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="0" r="0" cs="4" s="0">
+<O>
+<![CDATA[月计划兑现率]]></O>
+<Expand/>
+</C>
+<C c="0" r="1" cs="2" s="1">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=$trainType]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="2" r="1" cs="2" s="1">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=$repairClassName]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="4" r="1" s="2">
+<Expand/>
+</C>
+<C c="0" r="2" s="1">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=$year]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="2" s="3">
+<O>
+<![CDATA[月计划台数]]></O>
+<Expand/>
+</C>
+<C c="2" r="2" s="3">
+<O>
+<![CDATA[实际台数]]></O>
+<Expand/>
+</C>
+<C c="3" r="2" s="3">
+<O>
+<![CDATA[兑现率]]></O>
+<Expand/>
+</C>
+<C c="4" r="2" s="2">
+<Expand/>
+</C>
+<C c="0" r="3" s="3">
+<O>
+<![CDATA[1月]]></O>
+<Expand/>
+</C>
+<C c="1" r="3" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="计划台数"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[3]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="3"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="3" s="2">
+<O t="DSColumn">
+<Attributes dsName="real" columnName="COUNT(*)"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[2]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS_REAL]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="3"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="3" s="4">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C4 / B4]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="4" r="3" s="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=CONCATENATE($year, "01")]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="5" r="3">
+<Expand dir="0"/>
+</C>
+<C c="0" r="4" s="3">
+<O>
+<![CDATA[2月]]></O>
+<Expand/>
+</C>
+<C c="1" r="4" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="计划台数"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[3]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="4"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="4" s="2">
+<O t="DSColumn">
+<Attributes dsName="real" columnName="COUNT(*)"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[2]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS_REAL]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="4"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="4" s="4">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C5 / B5]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="4" r="4" s="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=CONCATENATE($year, "02")]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="0" r="5" s="3">
+<O>
+<![CDATA[3月]]></O>
+<Expand/>
+</C>
+<C c="1" r="5" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="计划台数"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[3]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="5"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="5" s="2">
+<O t="DSColumn">
+<Attributes dsName="real" columnName="COUNT(*)"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[2]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS_REAL]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="5"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="5" s="4">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C6 / B6]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="4" r="5" s="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=CONCATENATE($year, "03")]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="0" r="6" s="3">
+<O>
+<![CDATA[4月]]></O>
+<Expand/>
+</C>
+<C c="1" r="6" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="计划台数"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[3]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="6"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="6" s="2">
+<O t="DSColumn">
+<Attributes dsName="real" columnName="COUNT(*)"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[2]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS_REAL]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="6"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="6" s="4">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C7 / B7]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="4" r="6" s="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=CONCATENATE($year, "04")]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="0" r="7" s="3">
+<O>
+<![CDATA[5月]]></O>
+<Expand/>
+</C>
+<C c="1" r="7" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="计划台数"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[3]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="7"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="7" s="2">
+<O t="DSColumn">
+<Attributes dsName="real" columnName="COUNT(*)"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[2]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS_REAL]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="7"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="7" s="4">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C8 / B8]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="4" r="7" s="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=CONCATENATE($year, "05")]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="0" r="8" s="3">
+<O>
+<![CDATA[6月]]></O>
+<Expand/>
+</C>
+<C c="1" r="8" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="计划台数"/>
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[3]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="8"/>
+</Compare>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="8" s="2">
+<O t="DSColumn">
+<Attributes dsName="real" columnName="COUNT(*)"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[2]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS_REAL]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="8"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="8" s="4">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C9 / B9]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="4" r="8" s="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=CONCATENATE($year, "06")]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="0" r="9" s="3">
+<O>
+<![CDATA[7月]]></O>
+<Expand/>
+</C>
+<C c="1" r="9" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="计划台数"/>
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[3]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="9"/>
+</Compare>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="9" s="2">
+<O t="DSColumn">
+<Attributes dsName="real" columnName="COUNT(*)"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[2]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS_REAL]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="9"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="9" s="4">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C10 / B10]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="4" r="9" s="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=CONCATENATE($year, "07")]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="0" r="10" s="3">
+<O>
+<![CDATA[8月]]></O>
+<Expand/>
+</C>
+<C c="1" r="10" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="计划台数"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[3]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="10"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="10" s="2">
+<O t="DSColumn">
+<Attributes dsName="real" columnName="COUNT(*)"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[2]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS_REAL]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="10"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="10" s="4">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C11 / B11]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="4" r="10" s="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=CONCATENATE($year, "08")]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="0" r="11" s="3">
+<O>
+<![CDATA[9月]]></O>
+<Expand/>
+</C>
+<C c="1" r="11" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="计划台数"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[3]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="11"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="11" s="2">
+<O t="DSColumn">
+<Attributes dsName="real" columnName="COUNT(*)"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[2]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS_REAL]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="11"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="11" s="4">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C12 / B12]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="4" r="11" s="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=CONCATENATE($year, "09")]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="0" r="12" s="3">
+<O>
+<![CDATA[10月]]></O>
+<Expand/>
+</C>
+<C c="1" r="12" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="计划台数"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[3]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="12"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="12" s="2">
+<O t="DSColumn">
+<Attributes dsName="real" columnName="COUNT(*)"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[2]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS_REAL]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="12"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="12" s="4">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C13 / B13]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="4" r="12" s="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=CONCATENATE($year, "10")]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="5" r="12">
+<Expand dir="0"/>
+</C>
+<C c="0" r="13" s="3">
+<O>
+<![CDATA[11月]]></O>
+<Expand/>
+</C>
+<C c="1" r="13" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="计划台数"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[3]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="13"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="13" s="2">
+<O t="DSColumn">
+<Attributes dsName="real" columnName="COUNT(*)"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[2]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS_REAL]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="13"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="13" s="4">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C14 / B14]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="4" r="13" s="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=CONCATENATE($year, "11")]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="0" r="14" s="3">
+<O>
+<![CDATA[12月]]></O>
+<Expand/>
+</C>
+<C c="1" r="14" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="计划台数"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[3]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="14"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="14" s="2">
+<O t="DSColumn">
+<Attributes dsName="real" columnName="COUNT(*)"/>
+<Condition class="com.fr.data.condition.ListCondition">
+<JoinCondition join="0">
+<Condition class="com.fr.data.condition.CommonCondition">
+<CNUMBER>
+<![CDATA[2]]></CNUMBER>
+<CNAME>
+<![CDATA[MONTHS_REAL]]></CNAME>
+<Compare op="0">
+<ColumnRow column="4" row="14"/>
+</Compare>
+</Condition>
+</JoinCondition>
+</Condition>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="14" s="4">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C15 / B15]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="4" r="14" s="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=CONCATENATE($year, "12")]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="0" r="17">
+<Expand dir="0"/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting/>
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+</ReportAttrSet>
+</Report>
+<StyleList>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="112"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="1" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<Format class="java.text.DecimalFormat">
+<![CDATA[#0.00%]]></Format>
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

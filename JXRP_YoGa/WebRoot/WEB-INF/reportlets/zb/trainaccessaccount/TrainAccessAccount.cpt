@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20120529" releaseVersion="7.0.0">
+<TableDataMap>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="startDate"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="trainAliasName"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="dName"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="endDate"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="trainTypeIDX"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="trainNo"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="siteName"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select ttaa.TRAIN_TYPE_SHORTNAME,
+       ttaa.TRAIN_NO,
+       ttaa.TRAINALIASNAME,
+       ttaa.D_NAME,
+       ttaa.IN_TIME,
+       ede.dictname,
+       ttaa.ARRIVE_ORDER,
+       ttaa.IN_DRIVER,
+       ttaa.OUT_TIME,
+       ttaa.OUT_ORDER,
+       ttaa.OUT_DRIVER,
+       ttaa.SITENAME
+  from TWT_Train_Access_Account ttaa
+  left join eos_dict_entry ede   on ede.dictid = ttaa.to_go and ede.dicttypeid = 'TWT_TRAIN_ACCESS_ACCOUNT_TOGO'
+ where ttaa.Out_Time is not null
+   and ttaa.Record_Status = 0  
+
+       
+${if(len(trainTypeIDX) == 0, "", " and ttaa.Train_Type_IDX like '%"+trainTypeIDX+"%'")}
+${if(len(trainNo) == 0, "", " and ttaa.Train_No like '%"+trainNo+"%'")}
+${if(len(siteName) == 0, "", " and ttaa.siteName like '%"+siteName+"%'")}
+${if(len(dName) == 0, "", " and ttaa.D_Name like '%"+dName+"%'")}
+${if(len(trainAliasName) == 0, "", " and ttaa.trainAliasName like '%"+trainAliasName+"%'")}
+${if(len(startDate) == 0,"", " and ttaa.In_Time >= to_date('"+ startDate +"','yyyy-mm-dd hh24:mi:ss')")}
+${if(len(endDate) == 0,"", " and ttaa.In_Time <= to_date('"+ endDate +"','yyyy-mm-dd hh24:mi:ss')")}
+        order by
+            ttaa.In_Time desc,
+            ttaa.Update_Time desc]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<RowHeight defaultValue="723900">
+<![CDATA[2514600,1219200,723900,723900,723900,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[1447800,2362200,1866900,2400300,3390900,4343400,3657600,3467100,2438400,3962400,2514600,2590800,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="0" r="0" cs="13" s="0">
+<O>
+<![CDATA[机车出入段记录]]></O>
+<Expand/>
+</C>
+<C c="0" r="1" s="1">
+<O>
+<![CDATA[序号]]></O>
+<Expand/>
+</C>
+<C c="1" r="1" s="1">
+<O>
+<![CDATA[车型]]></O>
+<Expand/>
+</C>
+<C c="2" r="1" s="1">
+<O>
+<![CDATA[车号]]></O>
+<Expand/>
+</C>
+<C c="3" r="1" s="2">
+<O>
+<![CDATA[机车别名]]></O>
+<Expand/>
+</C>
+<C c="4" r="1" s="1">
+<O>
+<![CDATA[配属段]]></O>
+<Expand/>
+</C>
+<C c="5" r="1" s="1">
+<O>
+<![CDATA[入段时间]]></O>
+<Expand/>
+</C>
+<C c="6" r="1" s="1">
+<O>
+<![CDATA[入段去向]]></O>
+<Expand/>
+</C>
+<C c="7" r="1" s="1">
+<O>
+<![CDATA[到达车次]]></O>
+<Expand/>
+</C>
+<C c="8" r="1" s="2">
+<O>
+<![CDATA[入段司机]]></O>
+<Expand/>
+</C>
+<C c="9" r="1" s="1">
+<O>
+<![CDATA[出段时间]]></O>
+<Expand/>
+</C>
+<C c="10" r="1" s="2">
+<O>
+<![CDATA[出段车次]]></O>
+<Expand/>
+</C>
+<C c="11" r="1" s="2">
+<O>
+<![CDATA[出段司机]]></O>
+<Expand/>
+</C>
+<C c="12" r="1" s="1">
+<O>
+<![CDATA[站场]]></O>
+<Expand/>
+</C>
+<C c="0" r="2" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=&B3]]></Attributes>
+</O>
+<Expand leftParentDefault="false" left="B3"/>
+</C>
+<C c="1" r="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="TRAIN_TYPE_SHORTNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="TRAIN_NO"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="TRAINALIASNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="4" r="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="D_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="5" r="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="IN_TIME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="6" r="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="DICTNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="7" r="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="ARRIVE_ORDER"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="8" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="IN_DRIVER"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="9" r="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="OUT_TIME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="10" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="OUT_ORDER"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="11" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="OUT_DRIVER"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="12" r="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="SITENAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<Margin top="986400" left="2743200" bottom="986400" right="2743200"/>
+</PaperSetting>
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+</ReportAttrSet>
+</Report>
+<StyleList>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="120"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="1" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

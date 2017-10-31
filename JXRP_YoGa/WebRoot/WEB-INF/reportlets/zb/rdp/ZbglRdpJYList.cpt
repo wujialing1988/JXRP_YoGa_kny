@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20120529" releaseVersion="7.0.0">
+<TableDataMap>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="trainTypeShortName"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="startDate"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="siteID"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="rdpStatus"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="dName"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="endDate"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="trainNo"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[SELECT
+            A.IDX,
+            A.TRAIN_TYPE_SHORTNAME,
+            A.TRAIN_NO,
+            A.D_NAME,
+            B.IN_TIME,
+            B.TO_GO,
+            A.RDP_START_TIME,
+            A.REPAIR_CLASS,
+            (SELECT
+                COUNT(1) 
+            FROM
+                ZB_ZBGL_RDP_WI 
+            WHERE
+                RECORD_STATUS = 0 
+                AND RDP_IDX = A.IDX 
+                AND WI_STATUS = 'COMPLETE')||'/'||          (SELECT
+                COUNT(1) 
+            FROM
+                ZB_ZBGL_RDP_WI 
+            WHERE
+                RECORD_STATUS = 0 
+                AND RDP_IDX = A.IDX ) AS rdpCount,
+            (SELECT
+                COUNT(1) 
+            FROM
+                ZB_ZBGL_JT6 
+            WHERE
+                RECORD_STATUS = 0 
+                AND RDP_IDX = A.IDX 
+                AND FAULT_NOTICE_STATUS = 'COMPLETE')||'/'||          (SELECT
+                COUNT(1) 
+            FROM
+                ZB_ZBGL_JT6 
+            WHERE
+                RECORD_STATUS = 0 
+                AND RDP_IDX = A.IDX ) AS tpCount,
+            (SELECT
+                COUNT(1) 
+            FROM
+                ZB_ZBGL_PCZZ_WI 
+            WHERE
+                RECORD_STATUS = 0 
+                AND RDP_IDX = A.IDX 
+                AND WI_STATUS = 'COMPLETE')||'/'||          (SELECT
+                COUNT(1) 
+            FROM
+                ZB_ZBGL_PCZZ_WI 
+            WHERE
+                RECORD_STATUS = 0 
+                AND RDP_IDX = A.IDX ) AS pczzCount,
+            A.TO_GO AS afterToGo,
+            A.SITENAME,
+            A.TRAIN_ACCESS_ACCOUNT_IDX,
+            A.RDP_STATUS,
+            A.FROM_PERSONID,
+            A.FROM_PERSONNAME,
+            A.TO_PERSONID,
+            A.TO_PERSONNAME,
+            A.OUT_ORDER,
+            A.REMARKS,
+            A.Rdp_End_Time,
+            (SELECT
+                COUNT(1) 
+            FROM
+                ZB_ZBGL_RDP_WI 
+            WHERE
+                RECORD_STATUS = 0 
+                AND RDP_IDX = A.IDX 
+                AND WI_STATUS = 'COMPLETE') AS handledRdpCount,
+            (SELECT
+                COUNT(1) 
+            FROM
+                ZB_ZBGL_RDP_WI 
+            WHERE
+                RECORD_STATUS = 0 
+                AND RDP_IDX = A.IDX ) AS allRdpCount,
+            (SELECT
+                COUNT(1) 
+            FROM
+                ZB_ZBGL_JT6 
+            WHERE
+                RECORD_STATUS = 0 
+                AND RDP_IDX = A.IDX 
+                AND FAULT_NOTICE_STATUS = 'COMPLETE') AS handledTpCount,
+            (SELECT
+                COUNT(1) 
+            FROM
+                ZB_ZBGL_JT6 
+            WHERE
+                RECORD_STATUS = 0 
+                AND RDP_IDX = A.IDX ) AS allTpCount,
+            (SELECT
+                COUNT(1) 
+            FROM
+                ZB_ZBGL_PCZZ_WI 
+            WHERE
+                RECORD_STATUS = 0 
+                AND RDP_IDX = A.IDX 
+                AND WI_STATUS = 'COMPLETE') AS handledPczzCount,
+            (SELECT
+                COUNT(1) 
+            FROM
+                ZB_ZBGL_PCZZ_WI 
+            WHERE
+                RECORD_STATUS = 0 
+                AND RDP_IDX = A.IDX ) AS allPczzCount    
+        FROM
+            ZB_ZBGL_RDP A,
+            TWT_TRAIN_ACCESS_ACCOUNT B   
+        WHERE
+            A.TRAIN_ACCESS_ACCOUNT_IDX = B.IDX     
+            AND A.RECORD_STATUS = 0     
+            AND B.RECORD_STATUS = 0     
+            ${if(len(trainTypeShortName) == 0, "", " and a.TRAIN_TYPE_SHORTNAME like '%"+trainTypeShortName+"%'")}
+            ${if(len(trainNo) == 0, "", " and a.Train_No like '%"+trainNo+"%'")}
+            ${if(len(dName) == 0, "", " and a.D_Name like '%"+dName+"%'")}
+            ${if(len(siteID) == 0, "", " and a.siteID = '"+siteID+"'")}
+            ${if(len(startDate) == 0,"", " and b.In_Time >= to_date('"+ startDate +"','yyyy-mm-dd hh24:mi:ss')")}
+            ${if(len(endDate) == 0,"", " and b.In_Time <= to_date('"+ endDate +"','yyyy-mm-dd hh24:mi:ss')")}
+            ${if(len(rdpStatus) == 0, "", " and a.RDP_STATUS in ('"+replace(rdpStatus,",","','")+"')")}
+        ORDER BY
+            B.IN_TIME DESC]]></Query>
+</TableData>
+<TableData name="ds2" class="com.fr.data.impl.DBTableData">
+<Parameters/>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select * from eos_dict_entry where DICTTYPEID='TWT_TRAIN_ACCESS_ACCOUNT_TOGO']]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<RowHeight defaultValue="723900">
+<![CDATA[2514600,1219200,723900,723900,723900,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[1447800,2743200,2247900,4000500,4533900,3657600,3886200,4305300,3962400,3390900,4648200,3124200,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="0" r="0" cs="10" s="0">
+<O>
+<![CDATA[机车整备合格交验列表]]></O>
+<Expand/>
+</C>
+<C c="0" r="1" s="1">
+<O>
+<![CDATA[序号]]></O>
+<Expand/>
+</C>
+<C c="1" r="1" s="1">
+<O>
+<![CDATA[车型]]></O>
+<Expand/>
+</C>
+<C c="2" r="1" s="1">
+<O>
+<![CDATA[车号]]></O>
+<Expand/>
+</C>
+<C c="3" r="1" s="1">
+<O>
+<![CDATA[配属段]]></O>
+<Expand/>
+</C>
+<C c="4" r="1" s="1">
+<O>
+<![CDATA[入段时间]]></O>
+<Expand/>
+</C>
+<C c="5" r="1" s="1">
+<O>
+<![CDATA[入段去向]]></O>
+<Expand/>
+</C>
+<C c="6" r="1" s="1">
+<O>
+<![CDATA[整备开始时间]]></O>
+<Expand/>
+</C>
+<C c="7" r="1" s="1">
+<O>
+<![CDATA[检修类型]]></O>
+<Expand/>
+</C>
+<C c="8" r="1" s="1">
+<O>
+<![CDATA[检查任务]]></O>
+<Expand/>
+</C>
+<C c="9" r="1" s="1">
+<O>
+<![CDATA[提票任务]]></O>
+<Expand/>
+</C>
+<C c="10" r="1" s="1">
+<O>
+<![CDATA[普查整治任务]]></O>
+<Expand/>
+</C>
+<C c="11" r="1" s="1">
+<O>
+<![CDATA[整备后去向]]></O>
+<Expand/>
+</C>
+<C c="12" r="1" s="1">
+<O>
+<![CDATA[站场]]></O>
+<Expand/>
+</C>
+<C c="0" r="2" s="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=&B3]]></Attributes>
+</O>
+<Expand leftParentDefault="false" left="B3"/>
+</C>
+<C c="1" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="TRAIN_TYPE_SHORTNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="TRAIN_NO"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="D_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="4" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="IN_TIME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="5" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="TO_GO"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Present class="com.fr.base.present.DictPresent">
+<Dictionary class="com.fr.data.impl.TableDataDictionary">
+<FormulaDictAttr ki="1" vi="2"/>
+<TableDataDictAttr>
+<TableData class="com.fr.data.impl.NameTableData">
+<Name>
+<![CDATA[ds2]]></Name>
+</TableData>
+</TableDataDictAttr>
+</Dictionary>
+</Present>
+<Expand dir="0"/>
+</C>
+<C c="6" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="RDP_START_TIME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="7" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="REPAIR_CLASS"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[SWITCH($$$,'10','碎修','20','临修')]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="8" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="RDPCOUNT"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="9" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="TPCOUNT"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="10" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="PCZZCOUNT"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="11" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="AFTERTOGO"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="12" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="SITENAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<PaperSize width="30240000" height="50400000"/>
+<Margin top="986400" left="2743200" bottom="986400" right="2743200"/>
+</PaperSetting>
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+</ReportAttrSet>
+</Report>
+<ReportParameterAttr>
+<Attributes showWindow="true" delayPlaying="true" windowPosition="1" align="0"/>
+<PWTitle>
+<![CDATA[参数]]></PWTitle>
+</ReportParameterAttr>
+<StyleList>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="120"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

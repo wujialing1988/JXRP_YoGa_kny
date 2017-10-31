@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20120529" releaseVersion="7.0.0">
+<TableDataMap>
+<TableData name="不合格新品返厂统计" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="startDate"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="matCode"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="specificationModel"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="endDate"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="partsName"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select t.parts_name as "配件名称",
+       t.specification_model as "规格型号",
+       t.specification_model_code as "规格型号编号",
+       t.mat_code as "物料编码",
+       t.unit as "计量单位",
+       count(*) as "梳理"
+from PJWZ_NEW_PARTS_BACK_INFO t
+where t.record_status = 0 
+${if(len(matCode) == 0, "", " and t.MAT_CODE like '%"+matCode+"%'")}
+${if(len(specificationModel) == 0, "", " and t.SPECIFICATION_MODEL like '%"+specificationModel+"%'")}
+${if(len(partsName) == 0, "", " and t.PARTS_NAME like '%"+partsName+"%'")}
+${if(len(startDate) == 0,"", " and t.back_date >= to_date('"+ startDate +"','yyyy-MM-dd')")}
+${if(len(endDate) == 0,"", " and t.back_date <= to_date('"+ endDate +"','yyyy-MM-dd')")}
+group by 
+ t.parts_name,
+       t.specification_model,
+       t.specification_model_code,
+       t.mat_code,
+       t.unit]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<RowHeight defaultValue="723900">
+<![CDATA[723900,1447800,1143000,723900,723900,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[1524000,6629400,6591300,4343400,2743200,2743200,0,2743200,2743200,2743200,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="0" r="0" s="0">
+<O>
+<![CDATA[合计：]]></O>
+<Expand/>
+</C>
+<C c="1" r="0" s="1">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(F3)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="2" r="0" cs="4" s="0">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="返厂日期：" + $startDate + " 至 " + $endDate]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="0" r="1" s="2">
+<O>
+<![CDATA[序号]]></O>
+<Expand/>
+</C>
+<C c="1" r="1" s="2">
+<O>
+<![CDATA[配件名称]]></O>
+<Expand/>
+</C>
+<C c="2" r="1" s="2">
+<O>
+<![CDATA[规格型号]]></O>
+<Expand/>
+</C>
+<C c="3" r="1" s="2">
+<O>
+<![CDATA[物料编码]]></O>
+<Expand/>
+</C>
+<C c="4" r="1" s="2">
+<O>
+<![CDATA[计量单位]]></O>
+<Expand/>
+</C>
+<C c="5" r="1" s="2">
+<O>
+<![CDATA[梳理]]></O>
+<Expand/>
+</C>
+<C c="6" r="1" s="2">
+<O>
+<![CDATA[规格型号编号]]></O>
+<Expand/>
+</C>
+<C c="0" r="2" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=&B3]]></Attributes>
+</O>
+<Expand leftParentDefault="false" left="B3"/>
+</C>
+<C c="1" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="不合格新品返厂统计" columnName="配件名称"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="不合格新品返厂统计" columnName="规格型号"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="不合格新品返厂统计" columnName="物料编码"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="4" r="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="不合格新品返厂统计" columnName="计量单位"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="5" r="2" s="5">
+<O t="DSColumn">
+<Attributes dsName="不合格新品返厂统计" columnName="梳理"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="返厂明细">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="title"/>
+<O>
+<![CDATA[返厂明细]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/pjwz/newpartsmanage/bhgfcgl/NewPartsBackStatisticsItems.cpt]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&startDate="+$startDate+"&endDate="+$endDate+"&specificationModelCode="+G3]]></Attributes>
+</O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="0"/>
+</C>
+<C c="6" r="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="不合格新品返厂统计" columnName="规格型号编号"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting>
+<Margin top="986400" left="2743200" bottom="986400" right="2743200"/>
+</PaperSetting>
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+</ReportAttrSet>
+</Report>
+<StyleList>
+<Style horizontal_alignment="4" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="2" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="2" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72" foreground="-16776961" underline="1"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

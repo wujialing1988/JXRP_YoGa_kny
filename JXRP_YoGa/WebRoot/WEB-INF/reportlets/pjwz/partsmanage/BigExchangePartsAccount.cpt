@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20120529" releaseVersion="7.0.0">
+<TableDataMap>
+<TableData name="大型互换配件周转记录" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="startDate"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="partsTypeIdx"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="endDate"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[SELECT * FROM 
+(
+      SELECT * FROM 
+      (SELECT 
+          T.IDX AS IDX,
+          T.unload_traintype || T.unload_trainno AS "下车机车",
+          T.UNLOAD_Place AS "下车位置",
+          to_char(T.UNLOAD_DATE, 'yyyy-mm-dd') as "下车日期",
+          T.UNLOAD_Repair_Class || T.Unload_Repair_Time as "下车修程",
+          T.UNLOAD_Reason as "下车原因",
+          T.ABOARD_TRAINTYPE || T.ABOARD_TRAINNO as "上车机车",
+          to_char(T.aboard_date, 'yyyy-mm-dd') as "上车日期",
+          T.ABOARD_Place as "上车位置",
+          T.ABOARD_Repair_Class || T.Aboard_Repair_Time as "上车修程",
+          T.Parts_Status_NAME as "状态",
+          T.OLD_PARTS_NO as "配件旧编号",
+          T.PARTS_NO as "配件编号"
+      FROM 
+          PJWZ_PARTS_ACCOUNT T
+      WHERE T.RECORD_STATUS = 0
+		${if(len(partsTypeIdx) == 0, "", "and t.PARTS_TYPE_IDX='" + partsTypeIdx + "'") }
+		${if(len(startDate) == 0, "", " and t.parts_status_update_date >= to_date('" + startDate + "','yyyy-MM-dd HH24:mi:ss')") }
+		${if(len(endDate) == 0, "", " and t.parts_status_update_date <= to_date('" + endDate + "','yyyy-MM-dd HH24:mi:ss')") }
+      ) ACC 
+      LEFT JOIN 
+      (SELECT T.PARTS_ACCOUNT_IDX, TO_CHAR(T.WH_DATE, 'YYYY-MM-DD') AS "入库日期"  FROM PJWZ_PARTS_STOCK T WHERE T.RECORD_STATUS = 0) STOCK 
+      ON 
+      ACC.IDX = STOCK.PARTS_ACCOUNT_IDX
+) A 
+LEFT JOIN 
+(
+      SELECT DISTINCT T.PARTS_ACCOUNT_IDX, T.OUTSOURCING_FACTORY AS "委修厂家" FROM PJWZ_PARTS_OUTSOURCING T WHERE T.RECORD_STATUS = 0
+) B
+ON
+A.IDX = B.PARTS_ACCOUNT_IDX]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<RowHeight defaultValue="723900">
+<![CDATA[1485900,1447800,1257300,723900,723900,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[1638300,3733800,0,3390900,2933700,2743200,2743200,4533900,5448300,3162300,3390900,2743200,2743200,2743200,2705100,6972300,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="1" r="0" cs="3" s="0">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="配件名称：" + $partsName]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="5" r="0" cs="4" s="0">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="规格型号：" + $partsType]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="9" r="0" cs="4" s="0">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="状态修改日期：" + $startDate + " 至 " + $endDate]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="14" r="0" cs="2" s="0">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="统计日期：" + today()]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="0" r="1" s="1">
+<O>
+<![CDATA[序号]]></O>
+<Expand/>
+</C>
+<C c="1" r="1" s="1">
+<O>
+<![CDATA[配件编号]]></O>
+<Expand/>
+</C>
+<C c="2" r="1" s="2">
+<O>
+<![CDATA[配件旧编号]]></O>
+<Expand/>
+</C>
+<C c="3" r="1" s="1">
+<O>
+<![CDATA[下车机车]]></O>
+<Expand/>
+</C>
+<C c="4" r="1" s="1">
+<O>
+<![CDATA[下车位置]]></O>
+<Expand/>
+</C>
+<C c="5" r="1" s="1">
+<O>
+<![CDATA[下车日期]]></O>
+<Expand/>
+</C>
+<C c="6" r="1" s="1">
+<O>
+<![CDATA[下车修程]]></O>
+<Expand/>
+</C>
+<C c="7" r="1" s="1">
+<O>
+<![CDATA[下车原因]]></O>
+<Expand/>
+</C>
+<C c="8" r="1" s="1">
+<O>
+<![CDATA[委修厂家]]></O>
+<Expand/>
+</C>
+<C c="9" r="1" s="1">
+<O>
+<![CDATA[入库日期]]></O>
+<Expand/>
+</C>
+<C c="10" r="1" s="1">
+<O>
+<![CDATA[上车机车]]></O>
+<Expand/>
+</C>
+<C c="11" r="1" s="1">
+<O>
+<![CDATA[上车日期]]></O>
+<Expand/>
+</C>
+<C c="12" r="1" s="1">
+<O>
+<![CDATA[上车位置]]></O>
+<Expand/>
+</C>
+<C c="13" r="1" s="1">
+<O>
+<![CDATA[上车修程]]></O>
+<Expand/>
+</C>
+<C c="14" r="1" s="1">
+<O>
+<![CDATA[状态]]></O>
+<Expand/>
+</C>
+<C c="15" r="1" s="1">
+<O>
+<![CDATA[备注]]></O>
+<Expand/>
+</C>
+<C c="0" r="2" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=&B3]]></Attributes>
+</O>
+<Expand dir="0" leftParentDefault="false" left="B3"/>
+</C>
+<C c="1" r="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="大型互换配件周转记录" columnName="配件编号"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="大型互换配件周转记录" columnName="配件旧编号"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="大型互换配件周转记录" columnName="下车机车"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="4" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="大型互换配件周转记录" columnName="下车位置"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="5" r="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="大型互换配件周转记录" columnName="下车日期"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="6" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="大型互换配件周转记录" columnName="下车修程"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="7" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="大型互换配件周转记录" columnName="下车原因"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="8" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="大型互换配件周转记录" columnName="委修厂家"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="9" r="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="大型互换配件周转记录" columnName="入库日期"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="10" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="大型互换配件周转记录" columnName="上车机车"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="11" r="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="大型互换配件周转记录" columnName="上车日期"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="12" r="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="大型互换配件周转记录" columnName="上车位置"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="13" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="大型互换配件周转记录" columnName="上车修程"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="14" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="大型互换配件周转记录" columnName="状态"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="15" r="2" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=if(len(C3) == 0, "", if(len(B3)==0, "", "编号由" + B3 + "修改为" + C3 + "；"))]]></Attributes>
+</O>
+<Expand/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<PaperSize width="30240000" height="57168000"/>
+<Margin top="986400" left="2743200" bottom="986400" right="2743200"/>
+</PaperSetting>
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+</ReportAttrSet>
+</Report>
+<StyleList>
+<Style horizontal_alignment="2" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="1" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="2" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

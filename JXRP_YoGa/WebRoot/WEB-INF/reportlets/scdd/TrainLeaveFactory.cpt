@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20120529" releaseVersion="7.0.0">
+<TableDataMap>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="isOut"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="sTime"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="dName"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="bName"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="driver"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="trainType"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="endTime"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="trainOrder"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="trainNo"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select t.idx,
+       t.train_type_shortname,
+       t.train_no,
+       t.b_name,
+       t.b_shortname,
+       t.d_name,
+       t.d_shortname,
+       t.work_number,
+       to_char(t.real_warehousing_time, 'yyyy-MM-dd hh24:mi') real_warehousing_time, --入厂时间
+       t.warehousing_driver , --入厂司机
+       t.warehousing_train_order,--入厂车次
+       to_char(t.real_ex_warehouse_time, 'yyyy-MM-dd hh24:mi') real_ex_warehouse_time,
+       t.ex_warehouse_train_order,--出厂车次
+       t.ex_warehouse_driver,
+       t.warehouse_status,
+       t.in_register_person_name,
+       to_char(t.in_register_time, 'yyyy-MM-dd hh24:mi') in_register_time,
+       to_char(t.out_register_time, 'yyyy-MM-dd hh24:mi') out_register_time,--录入时间
+       t.out_register_person_name  --出厂录入人
+       
+  from SCDD_Train_Warehouse t
+ where t.record_status = 0
+${if(len(trainType) == 0,""," and t.train_type_shortname like '%"+trainType+"%'")}   
+${if(len(trainNo) == 0,""," and t.train_no like '%"+trainNo+"%'")}  
+${if(len(driver) == 0,""," and t.ex_warehouse_driver like '%"+driver+"%'")}  
+${if(len(trainOrder) == 0,""," and t.ex_warehouse_train_order like '%"+trainOrder+"%'")}  
+${if(len(bName) == 0,""," and t.b_shortname like '%"+bName+"%'")} 
+${if(len(dName) == 0,""," and t.d_shortname like '%"+dName+"%'")} 
+${if(len(sTime) == 0,""," and t.real_ex_warehouse_time >= to_date('"+sTime+"','yyyy-MM-dd')")} 
+${if(len(endTime) == 0,""," and t.real_ex_warehouse_time <= to_date('"+endTime+"','yyyy-MM-dd hh24:mi:ss')")}
+${if(isOut == 'true'," and t.Warehouse_Status = 30"," and t.Warehouse_Status <30 ")}]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR F="0" T="2"/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<RowHeight defaultValue="723900">
+<![CDATA[723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[1714500,2362200,2209800,1790700,1790700,4610100,2819400,2743200,4572000,3048000,3124200,3276600,4533900,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="0" r="0" cs="13" rs="2" s="0">
+<O>
+<![CDATA[机车出段台账]]></O>
+<Expand/>
+</C>
+<C c="0" r="2" s="1">
+<O>
+<![CDATA[序号]]></O>
+<Expand/>
+</C>
+<C c="1" r="2" s="1">
+<O>
+<![CDATA[车型]]></O>
+<Expand/>
+</C>
+<C c="2" r="2" s="1">
+<O>
+<![CDATA[车号]]></O>
+<Expand/>
+</C>
+<C c="3" r="2" s="1">
+<O>
+<![CDATA[配属局]]></O>
+<Expand/>
+</C>
+<C c="4" r="2" s="1">
+<O>
+<![CDATA[配属段]]></O>
+<Expand/>
+</C>
+<C c="5" r="2" s="1">
+<O>
+<![CDATA[入段时间]]></O>
+<Expand/>
+</C>
+<C c="6" r="2" s="1">
+<O>
+<![CDATA[入段车次]]></O>
+<Expand/>
+</C>
+<C c="7" r="2" s="1">
+<O>
+<![CDATA[入段司机]]></O>
+<Expand/>
+</C>
+<C c="8" r="2" s="1">
+<O>
+<![CDATA[出段时间]]></O>
+<Expand/>
+</C>
+<C c="9" r="2" s="1">
+<O>
+<![CDATA[出段车次]]></O>
+<Expand/>
+</C>
+<C c="10" r="2" s="1">
+<O>
+<![CDATA[出段司机]]></O>
+<Expand/>
+</C>
+<C c="11" r="2" s="1">
+<O>
+<![CDATA[录入人]]></O>
+<Expand/>
+</C>
+<C c="12" r="2" s="1">
+<O>
+<![CDATA[录入时间]]></O>
+<Expand/>
+</C>
+<C c="0" r="3" s="1">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=&B4]]></Attributes>
+</O>
+<Expand leftParentDefault="false" left="B4"/>
+</C>
+<C c="1" r="3" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="TRAIN_TYPE_SHORTNAME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="3" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="TRAIN_NO"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="3" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="B_SHORTNAME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="4" r="3" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="D_SHORTNAME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="5" r="3" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="REAL_WAREHOUSING_TIME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="6" r="3" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="WAREHOUSING_TRAIN_ORDER"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="7" r="3" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="WAREHOUSING_DRIVER"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="8" r="3" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="REAL_EX_WAREHOUSE_TIME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="9" r="3" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="EX_WAREHOUSE_TRAIN_ORDER"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="10" r="3" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="EX_WAREHOUSE_DRIVER"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="11" r="3" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="OUT_REGISTER_PERSON_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="12" r="3" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="OUT_REGISTER_TIME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="0" r="4" cs="13" rs="4">
+<Expand/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<PaperSize width="30240000" height="47520000"/>
+<Margin top="986400" left="2743200" bottom="986400" right="2743200"/>
+</PaperSetting>
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+</ReportAttrSet>
+</Report>
+<StyleList>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="120"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

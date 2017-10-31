@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20120529" releaseVersion="7.0.0">
+<TableDataMap>
+<TableData name="ds" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="count"/>
+<O>
+<![CDATA[2]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="trainTypeIDX"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="endDate"/>
+<O>
+<![CDATA[2014-3-31]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="trainNo"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="type"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="beginDate"/>
+<O>
+<![CDATA[2014-3-1]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select a.* from
+(select t.train_type_shortname,
+       t.FIXPLACE_FULLNAME,
+       t.train_no,
+       count(t.idx) count
+from (select * from JXGC_Fault_Ticket where record_status = 0 and status = 30 and FIXPLACE_FULLNAME is not null and FAULT_NAME is not null) t 
+where t.FAULT_OCCUR_DATE  between TO_DATE('${beginDate}','yyyy-MM-dd')
+		and TO_DATE('${endDate}','yyyy-MM-dd')
+    ${if(len(type) == 0,
+                                 "",
+                                 " and t.type = '" + type + "'") }
+    ${if(len(trainTypeIDX) == 0,
+                                 "",
+                                 " and t.train_type_idx = '" + trainTypeIDX + "'") }
+    ${if(len(trainNo) == 0,
+                                 "",
+                                 " and t.train_no = '" + trainNo + "'") }
+group by t.train_type_shortname, t.FIXPLACE_FULLNAME, t.train_no) a
+where a.count >= ${count}
+order by a.train_type_shortname, a.train_no,a.FIXPLACE_FULLNAME]]></Query>
+</TableData>
+<TableData name="eosdict" class="com.fr.data.impl.DBTableData">
+<Parameters/>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select * from EOS_DICT_ENTRY
+ where dicttypeid in ('JCZL_FAULT_TYPE')
+${if(len(type) == 0,
+                                 " and dictid = 0",
+                                 " and dictid = " + type) }]]></Query>
+</TableData>
+<TableData name="trainType" class="com.fr.data.impl.DBTableData">
+<Parameters/>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select * from J_JCGY_TRAIN_TYPE
+where T_TYPE_ID = '${trainTypeIDX}'
+]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<RowHeight defaultValue="723900">
+<![CDATA[1714500,1143000,723900,723900,723900,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[762000,2133600,2667000,2743200,2743200,2743200,4572000,3048000,2743200,2743200,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="0" r="0" cs="9" s="0">
+<O>
+<![CDATA[同车同位置多次报活统计表]]></O>
+<Expand/>
+</C>
+<C c="1" r="1" cs="2" s="1">
+<O>
+<![CDATA[故障发现日期：]]></O>
+<Expand/>
+</C>
+<C c="3" r="1" s="1">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=$beginDate+"~"]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="4" r="1" s="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=$endDate]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="6" r="1" s="1">
+<O>
+<![CDATA[最小发生次数：]]></O>
+<Expand/>
+</C>
+<C c="7" r="1" s="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=$count]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="2" cs="2" s="1">
+<O>
+<![CDATA[提票类型：]]></O>
+<Expand/>
+</C>
+<C c="3" r="2" s="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=$type]]></Attributes>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="6" r="2" s="1">
+<O>
+<![CDATA[车型：]]></O>
+<Expand/>
+</C>
+<C c="7" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="trainType" columnName="SHORTNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="1" r="3" s="3">
+<O>
+<![CDATA[序号]]></O>
+<Expand/>
+</C>
+<C c="2" r="3" s="3">
+<O>
+<![CDATA[车型]]></O>
+<Expand/>
+</C>
+<C c="3" r="3" s="3">
+<O>
+<![CDATA[车号]]></O>
+<Expand/>
+</C>
+<C c="4" r="3" cs="4" s="3">
+<O>
+<![CDATA[故障位置]]></O>
+<Expand/>
+</C>
+<C c="8" r="3" s="3">
+<O>
+<![CDATA[次数]]></O>
+<Expand/>
+</C>
+<C c="1" r="4" s="4">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=&C5]]></Attributes>
+</O>
+<Expand leftParentDefault="false" left="C5"/>
+</C>
+<C c="2" r="4" s="5">
+<O t="DSColumn">
+<Attributes dsName="ds" columnName="TRAIN_TYPE_SHORTNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="4" s="6">
+<O t="DSColumn">
+<Attributes dsName="ds" columnName="TRAIN_NO"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="4" r="4" cs="4" s="5">
+<O t="DSColumn">
+<Attributes dsName="ds" columnName="FIXPLACE_FULLNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="8" r="4" s="7">
+<O t="DSColumn">
+<Attributes dsName="ds" columnName="COUNT"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="title"/>
+<O>
+<![CDATA[故障详情]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jczl/faultAnalysis/faultTicketDetail.cpt]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&type="+$type+"&trainTypeName="+C5+"&beginDate="+$beginDate+"&endDate="+$endDate+"&fixPlaceName="+E5+"&trainNo="+D5]]></Attributes>
+</O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="0"/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<Margin top="986400" left="2743200" bottom="986400" right="2743200"/>
+</PaperSetting>
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+</ReportAttrSet>
+</Report>
+<StyleList>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="144"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="4" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="2" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="2" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="72" foreground="-16776961" underline="1"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

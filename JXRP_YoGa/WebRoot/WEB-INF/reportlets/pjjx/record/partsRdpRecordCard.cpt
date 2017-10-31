@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20120529" releaseVersion="7.0.0">
+<TableDataMap>
+<TableData name="recordCardDetail" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="rdpRecordIDX"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select a.Record_No, a.Record_Name,t.idx, t.Record_Card_Desc, r.Repair_Item_Name, r.Repair_Standard, 
+(case when d.idx is null then r.repair_result
+     else
+( d.Data_Item_Name||':'|| d.DATA_ITEM_RESULT )
+      end ) as result, t.Work_EmpName, (q.QC_Item_Name||'：'|| nvl(q.QR_EmpName,' '))as qrCheck
+ from PJJX_Parts_Rdp_Record a 
+ left join PJJX_Parts_Rdp_Record_Card t on a.idx = t.Rdp_Record_IDX
+ left join PJJX_Parts_Rdp_Record_RI r  on t.idx = r.Rdp_Record_Card_IDX 
+ left join PJJX_Parts_Rdp_Record_DI d on r.idx = d.Rdp_Record_RI_IDX
+ left join PJJX_Parts_Rdp_QR q on t.idx = q.Rdp_Record_Card_IDX
+where t.Rdp_Record_IDX = '${rdpRecordIDX}' 
+order by  t.seq_no, r.seq_no, d.seq_no, q.seq_no
+]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<RowHeight defaultValue="723900">
+<![CDATA[800100,1638300,800100,723900,2057400,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[2324100,4724400,4876800,7581900,4914900,3162300,5257800,5029200,2743200,2743200,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="1" r="0" s="0">
+<O>
+<![CDATA[配件编号：]]></O>
+<Expand/>
+</C>
+<C c="2" r="0" s="1">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=$partsNo]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="4" r="0" s="0">
+<O>
+<![CDATA[识别码：]]></O>
+<Expand/>
+</C>
+<C c="5" r="0" s="1">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=$identificationCode]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="1" s="0">
+<O>
+<![CDATA[记录单编号：]]></O>
+<Expand/>
+</C>
+<C c="2" r="1">
+<O t="DSColumn">
+<Attributes dsName="recordCardDetail" columnName="RECORD_NO"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="1" s="2">
+<O>
+<![CDATA[\t]]></O>
+<Expand/>
+</C>
+<C c="4" r="1" s="0">
+<O>
+<![CDATA[规格型号：]]></O>
+<Expand/>
+</C>
+<C c="5" r="1" s="1">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=$specificationModel]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="2" s="0">
+<O>
+<![CDATA[记录单名称：]]></O>
+<Expand/>
+</C>
+<C c="2" r="2" cs="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=$partsName]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="4" r="2" s="0">
+<O>
+<![CDATA[配件名称：]]></O>
+<Expand/>
+</C>
+<C c="5" r="2" cs="2" s="1">
+<O t="DSColumn">
+<Attributes dsName="recordCardDetail" columnName="RECORD_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="0" r="4" s="3">
+<O>
+<![CDATA[序号]]></O>
+<Expand/>
+</C>
+<C c="1" r="4" s="3">
+<O>
+<![CDATA[记录卡名称]]></O>
+<Expand/>
+</C>
+<C c="2" r="4" s="3">
+<O>
+<![CDATA[检修检测项]]></O>
+<Expand/>
+</C>
+<C c="3" r="4" s="3">
+<O>
+<![CDATA[  技术要求 ]]></O>
+<Expand/>
+</C>
+<C c="4" r="4" s="3">
+<O>
+<![CDATA[结果]]></O>
+<Expand/>
+</C>
+<C c="5" r="4" s="3">
+<O>
+<![CDATA[自检 ]]></O>
+<Expand/>
+</C>
+<C c="6" r="4" s="3">
+<O>
+<![CDATA[质量检查]]></O>
+<Expand/>
+</C>
+<C c="0" r="5" s="4">
+<O t="Formula" class="Formula">
+<Attributes reserveExecute="true">
+<![CDATA[=&B6]]></Attributes>
+</O>
+<Expand leftParentDefault="false" left="B6"/>
+</C>
+<C c="1" r="5" s="5">
+<O t="DSColumn">
+<Attributes dsName="recordCardDetail" columnName="RECORD_CARD_DESC"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="5" s="5">
+<O t="DSColumn">
+<Attributes dsName="recordCardDetail" columnName="REPAIR_ITEM_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="5" s="5">
+<O t="DSColumn">
+<Attributes dsName="recordCardDetail" columnName="REPAIR_STANDARD"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand/>
+</C>
+<C c="4" r="5" s="5">
+<O t="DSColumn">
+<Attributes dsName="recordCardDetail" columnName="RESULT"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="5" r="5" s="5">
+<O t="DSColumn">
+<Attributes dsName="recordCardDetail" columnName="WORK_EMPNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand leftParentDefault="false" left="B6"/>
+</C>
+<C c="6" r="5" s="5">
+<O t="DSColumn">
+<Attributes dsName="recordCardDetail" columnName="QRCHECK"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand leftParentDefault="false" left="B6"/>
+</C>
+<C c="2" r="11">
+<Expand/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<Margin top="986400" left="2743200" bottom="986400" right="2743200"/>
+</PaperSetting>
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+</ReportAttrSet>
+</Report>
+<ReportParameterAttr>
+<Attributes showWindow="true" delayPlaying="true" windowPosition="1" align="0"/>
+<PWTitle>
+<![CDATA[参数]]></PWTitle>
+</ReportParameterAttr>
+<StyleList>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="1" size="96"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="2" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="4" imageLayout="1">
+<FRFont name="SimSun" style="1" size="96"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="1" size="128"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

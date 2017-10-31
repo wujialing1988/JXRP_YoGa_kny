@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20120529" releaseVersion="7.0.0">
+<TableDataMap>
+<TableData name="rdp" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="rdpIdx"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select * from ZB_ZBGL_RDP where Record_Status=0 and idx='${rdpIdx}']]></Query>
+</TableData>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="rdpIdx"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select distinct sysdate as 当前时间,
+       c.HANDLE_PERSON_NAME as "修车人",
+       c.fetch_time as "领活时间",
+       c.handle_time as "销活时间"
+  from zb_zbgl_rdp_wi c
+  where c.rdp_idx='${rdpIdx}']]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<RowHeight defaultValue="723900">
+<![CDATA[723900,723900,1257300,990600,762000,723900,1143000,723900,1028700,914400,723900,723900,1295400,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[2057400,952500,4076700,876300,3086100,2933700,3581400,838200,1943100,2743200,1066800,1485900,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="1" r="1" s="0">
+<Expand/>
+</C>
+<C c="2" r="1" s="1">
+<Expand/>
+</C>
+<C c="3" r="1" s="1">
+<Expand/>
+</C>
+<C c="4" r="1" s="1">
+<Expand/>
+</C>
+<C c="5" r="1" s="1">
+<Expand/>
+</C>
+<C c="6" r="1" s="1">
+<Expand/>
+</C>
+<C c="7" r="1" s="1">
+<Expand/>
+</C>
+<C c="8" r="1" s="1">
+<Expand/>
+</C>
+<C c="9" r="1" s="1">
+<Expand/>
+</C>
+<C c="10" r="1" s="1">
+<Expand/>
+</C>
+<C c="11" r="1" s="1">
+<Expand/>
+</C>
+<C c="12" r="1" s="1">
+<Expand/>
+</C>
+<C c="13" r="1" s="1">
+<Expand/>
+</C>
+<C c="14" r="1" s="2">
+<Expand/>
+</C>
+<C c="1" r="2" s="3">
+<Expand/>
+</C>
+<C c="2" r="2" cs="13" s="4">
+<O>
+<![CDATA[机车出库合格证]]></O>
+<Expand/>
+</C>
+<C c="0" r="3" s="5">
+<Expand/>
+</C>
+<C c="1" r="3" s="6">
+<Expand/>
+</C>
+<C c="2" r="3" s="5">
+<Expand/>
+</C>
+<C c="3" r="3" s="5">
+<Expand/>
+</C>
+<C c="4" r="3" s="5">
+<Expand/>
+</C>
+<C c="5" r="3" s="5">
+<Expand/>
+</C>
+<C c="6" r="3" s="5">
+<Expand/>
+</C>
+<C c="7" r="3" cs="2" s="5">
+<Expand/>
+</C>
+<C c="9" r="3" s="5">
+<Expand/>
+</C>
+<C c="10" r="3" s="5">
+<Expand/>
+</C>
+<C c="11" r="3" s="5">
+<Expand/>
+</C>
+<C c="12" r="3" cs="3" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=$rule]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="0" r="4" s="5">
+<Expand/>
+</C>
+<C c="1" r="4" s="6">
+<Expand/>
+</C>
+<C c="2" r="4" s="5">
+<Expand/>
+</C>
+<C c="3" r="4" s="5">
+<Expand/>
+</C>
+<C c="4" r="4" s="5">
+<O>
+<![CDATA[]]></O>
+<Expand/>
+</C>
+<C c="5" r="4" s="8">
+<O>
+<![CDATA[时间：]]></O>
+<Expand/>
+</C>
+<C c="6" r="4" cs="4" s="9">
+<O t="DSColumn">
+<Attributes dsName="rdp" columnName="RDP_END_TIME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="10" r="4" s="5">
+<Expand/>
+</C>
+<C c="11" r="4" s="5">
+<Expand/>
+</C>
+<C c="12" r="4" s="5">
+<Expand/>
+</C>
+<C c="13" r="4" s="5">
+<Expand/>
+</C>
+<C c="14" r="4" s="10">
+<Expand/>
+</C>
+<C c="1" r="5" s="3">
+<Expand/>
+</C>
+<C c="14" r="5" s="11">
+<Expand/>
+</C>
+<C c="0" r="6" s="5">
+<Expand/>
+</C>
+<C c="1" r="6" s="6">
+<Expand/>
+</C>
+<C c="2" r="6" s="12">
+<O t="DSColumn">
+<Attributes dsName="rdp" columnName="TRAIN_TYPE_SHORTNAME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="6" s="5">
+<O>
+<![CDATA[型]]></O>
+<Expand/>
+</C>
+<C c="4" r="6" s="12">
+<O t="DSColumn">
+<Attributes dsName="rdp" columnName="TRAIN_NO"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="5" r="6" cs="9" s="5">
+<O>
+<![CDATA[号机车I级修已检查、检修，并经检验合格，达到运用条件。]]></O>
+<Expand/>
+</C>
+<C c="14" r="6" s="10">
+<Expand/>
+</C>
+<C c="0" r="7" s="5">
+<Expand/>
+</C>
+<C c="1" r="7" s="6">
+<Expand/>
+</C>
+<C c="2" r="7" s="5">
+<Expand/>
+</C>
+<C c="3" r="7" s="5">
+<Expand/>
+</C>
+<C c="4" r="7" s="5">
+<Expand/>
+</C>
+<C c="5" r="7" s="5">
+<Expand/>
+</C>
+<C c="6" r="7" s="5">
+<Expand/>
+</C>
+<C c="7" r="7" s="5">
+<Expand/>
+</C>
+<C c="8" r="7" s="5">
+<Expand/>
+</C>
+<C c="9" r="7" s="5">
+<Expand/>
+</C>
+<C c="10" r="7" s="5">
+<Expand/>
+</C>
+<C c="11" r="7" s="5">
+<Expand/>
+</C>
+<C c="12" r="7" s="5">
+<Expand/>
+</C>
+<C c="13" r="7" s="5">
+<Expand/>
+</C>
+<C c="14" r="7" s="10">
+<Expand/>
+</C>
+<C c="0" r="8" s="5">
+<Expand/>
+</C>
+<C c="1" r="8" s="6">
+<Expand/>
+</C>
+<C c="2" r="8" s="5">
+<Expand/>
+</C>
+<C c="3" r="8" cs="2" s="5">
+<O>
+<![CDATA[修车负责人]]></O>
+<Expand/>
+</C>
+<C c="5" r="8" cs="2" s="13">
+<O t="DSColumn">
+<Attributes dsName="rdp" columnName="FROM_PERSONNAME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="7" r="8" s="5">
+<Expand/>
+</C>
+<C c="8" r="8" s="5">
+<O>
+<![CDATA[时间]]></O>
+<Expand/>
+</C>
+<C c="9" r="8" cs="2" s="14">
+<O t="DSColumn">
+<Attributes dsName="rdp" columnName="RDP_END_TIME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="11" r="8" s="5">
+<Expand/>
+</C>
+<C c="12" r="8" s="5">
+<Expand/>
+</C>
+<C c="13" r="8" s="5">
+<Expand/>
+</C>
+<C c="14" r="8" s="10">
+<Expand/>
+</C>
+<C c="0" r="9" s="5">
+<Expand/>
+</C>
+<C c="1" r="9" s="6">
+<Expand/>
+</C>
+<C c="2" r="9" s="5">
+<Expand/>
+</C>
+<C c="3" r="9" cs="2" s="5">
+<O>
+<![CDATA[收车负责人]]></O>
+<Expand/>
+</C>
+<C c="5" r="9" cs="2" s="13">
+<Expand/>
+</C>
+<C c="7" r="9" s="5">
+<Expand/>
+</C>
+<C c="8" r="9" s="5">
+<O>
+<![CDATA[时间]]></O>
+<Expand/>
+</C>
+<C c="9" r="9" cs="2" s="13">
+<Expand/>
+</C>
+<C c="11" r="9" s="5">
+<Expand/>
+</C>
+<C c="12" r="9" s="5">
+<Expand/>
+</C>
+<C c="13" r="9" s="5">
+<Expand/>
+</C>
+<C c="14" r="9" s="10">
+<Expand/>
+</C>
+<C c="0" r="10" s="5">
+<Expand/>
+</C>
+<C c="1" r="10" s="6">
+<Expand/>
+</C>
+<C c="2" r="10" s="5">
+<Expand/>
+</C>
+<C c="3" r="10" s="5">
+<Expand/>
+</C>
+<C c="4" r="10" s="5">
+<Expand/>
+</C>
+<C c="5" r="10" s="5">
+<Expand/>
+</C>
+<C c="6" r="10" s="5">
+<Expand/>
+</C>
+<C c="7" r="10" s="5">
+<Expand/>
+</C>
+<C c="8" r="10" s="5">
+<Expand/>
+</C>
+<C c="9" r="10" s="5">
+<Expand/>
+</C>
+<C c="10" r="10" s="5">
+<Expand/>
+</C>
+<C c="11" r="10" s="5">
+<Expand/>
+</C>
+<C c="12" r="10" s="5">
+<Expand/>
+</C>
+<C c="13" r="10" s="5">
+<Expand/>
+</C>
+<C c="14" r="10" s="10">
+<Expand/>
+</C>
+<C c="0" r="11" s="5">
+<Expand/>
+</C>
+<C c="1" r="11" s="6">
+<Expand/>
+</C>
+<C c="2" r="11" s="5">
+<Expand/>
+</C>
+<C c="3" r="11" cs="2" s="5">
+<O>
+<![CDATA[特（盖章）]]></O>
+<Expand/>
+</C>
+<C c="5" r="11" s="5">
+<Expand/>
+</C>
+<C c="6" r="11" s="5">
+<Expand/>
+</C>
+<C c="7" r="11" s="5">
+<Expand/>
+</C>
+<C c="8" r="11" s="5">
+<Expand/>
+</C>
+<C c="9" r="11" s="5">
+<Expand/>
+</C>
+<C c="10" r="11" s="5">
+<Expand/>
+</C>
+<C c="11" r="11" s="5">
+<Expand/>
+</C>
+<C c="12" r="11" s="5">
+<Expand/>
+</C>
+<C c="13" r="11" s="5">
+<Expand/>
+</C>
+<C c="14" r="11" s="10">
+<Expand/>
+</C>
+<C c="0" r="12" s="5">
+<Expand/>
+</C>
+<C c="1" r="12" s="6">
+<Expand/>
+</C>
+<C c="2" r="12" s="5">
+<Expand/>
+</C>
+<C c="3" r="12" s="5">
+<Expand/>
+</C>
+<C c="4" r="12" s="5">
+<Expand/>
+</C>
+<C c="5" r="12" s="5">
+<Expand/>
+</C>
+<C c="6" r="12" s="5">
+<Expand/>
+</C>
+<C c="7" r="12" s="5">
+<Expand/>
+</C>
+<C c="8" r="12" s="5">
+<Expand/>
+</C>
+<C c="9" r="12" s="5">
+<Expand/>
+</C>
+<C c="10" r="12" s="5">
+<Expand/>
+</C>
+<C c="11" r="12" s="5">
+<Expand/>
+</C>
+<C c="12" r="12" s="5">
+<Expand/>
+</C>
+<C c="13" r="12" s="5">
+<Expand/>
+</C>
+<C c="14" r="12" s="10">
+<Expand/>
+</C>
+<C c="0" r="13" s="5">
+<Expand/>
+</C>
+<C c="1" r="13" s="6">
+<Expand/>
+</C>
+<C c="2" r="13" s="5">
+<Expand/>
+</C>
+<C c="3" r="13" s="5">
+<Expand/>
+</C>
+<C c="4" r="13" s="5">
+<Expand/>
+</C>
+<C c="5" r="13" s="5">
+<Expand/>
+</C>
+<C c="6" r="13" s="5">
+<O>
+<![CDATA[出勤乘务员]]></O>
+<Expand/>
+</C>
+<C c="7" r="13" cs="3" s="13">
+<Expand/>
+</C>
+<C c="10" r="13" s="5">
+<Expand/>
+</C>
+<C c="11" r="13" s="5">
+<O>
+<![CDATA[时间]]></O>
+<Expand/>
+</C>
+<C c="12" r="13" cs="2" s="13">
+<Expand/>
+</C>
+<C c="14" r="13" s="10">
+<Expand/>
+</C>
+<C c="0" r="14" s="5">
+<Expand/>
+</C>
+<C c="1" r="14" s="15">
+<Expand/>
+</C>
+<C c="2" r="14" s="13">
+<Expand/>
+</C>
+<C c="3" r="14" s="13">
+<Expand/>
+</C>
+<C c="4" r="14" s="13">
+<Expand/>
+</C>
+<C c="5" r="14" s="13">
+<Expand/>
+</C>
+<C c="6" r="14" s="13">
+<Expand/>
+</C>
+<C c="7" r="14" s="13">
+<Expand/>
+</C>
+<C c="8" r="14" s="13">
+<Expand/>
+</C>
+<C c="9" r="14" s="13">
+<Expand/>
+</C>
+<C c="10" r="14" s="13">
+<Expand/>
+</C>
+<C c="11" r="14" s="13">
+<Expand/>
+</C>
+<C c="12" r="14" s="13">
+<Expand/>
+</C>
+<C c="13" r="14" s="13">
+<Expand/>
+</C>
+<C c="14" r="14" s="16">
+<Expand/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<Margin top="986400" left="2743200" bottom="986400" right="2743200"/>
+</PaperSetting>
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+</ReportAttrSet>
+</Report>
+<StyleList>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Left style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Left style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="120"/>
+<Background name="NullBackground"/>
+<Border>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="96"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="96"/>
+<Background name="NullBackground"/>
+<Border>
+<Left style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="2" imageLayout="1">
+<FRFont name="微软雅黑" style="0" size="136" foreground="-65536"/>
+<Background name="ColorBackground" color="-1"/>
+<Border>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="4" imageLayout="1">
+<FRFont name="SimSun" style="0" size="96"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style imageLayout="1">
+<Format class="java.text.SimpleDateFormat">
+<![CDATA[yyyy年MM月dd日]]></Format>
+<FRFont name="SimSun" style="0" size="96"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="96"/>
+<Background name="NullBackground"/>
+<Border>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="96"/>
+<Background name="NullBackground"/>
+<Border>
+<Bottom style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="96"/>
+<Background name="NullBackground"/>
+<Border>
+<Bottom style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<Format class="java.text.SimpleDateFormat">
+<![CDATA[HH:mm]]></Format>
+<FRFont name="SimSun" style="0" size="96"/>
+<Background name="NullBackground"/>
+<Border>
+<Bottom style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="96"/>
+<Background name="NullBackground"/>
+<Border>
+<Bottom style="1"/>
+<Left style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="96"/>
+<Background name="NullBackground"/>
+<Border>
+<Bottom style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

@@ -1,0 +1,563 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20120529" releaseVersion="7.0.0">
+<TableDataMap>
+<TableData name="zx" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="endDate"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="beginDate"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="partsTypeId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select a.parts_no,
+       a.unload_date,
+       concat(a.unload_traintype, a.unload_trainno) as "unloadTrain",
+       a.unload_reason,
+       concat(a.unload_repair_class, a.unload_repair_time) as "unloadRepair",
+       o.wh_date as "owhdate",
+       o.hand_over_emp as "ohandoveremp",
+       o.ex_wh_date,
+       o.get_emp as "ogetemp",
+       s.wh_date as "swhdate",
+       s.hand_over_emp as "shandoveremp",
+       concat(a.aboard_traintype,a.aboard_trainno) as "aboardTrain",
+       a.aboard_date,
+       concat(a.aboard_repair_class,a.aboard_repair_time) as "aboardRepair",
+       s.get_emp as "sgetemp",
+       (case nvl(length(a.old_parts_no),0) when 0 then '' else '编号由' || a.old_parts_no || '变成' || a.parts_no end) as "remark",
+       a.parts_status_name 
+  from PJWZ_PARTS_ACCOUNT a
+  left join PJWZ_OLD_Parts_Stock o on a.idx = o.parts_account_idx
+  left join PJWZ_PARTS_STOCK s on a.idx = s.parts_account_idx
+ where a.record_status = 0 
+${if(len(partsTypeId) == 0,""," and a.parts_type_idx = '"+partsTypeId+"'")}
+${if(len(beginDate) == 0,""," and a.parts_status_update_date >= to_date('"+ beginDate +"','yyyy-MM-dd')")}
+${if(len(endDate) == 0,""," and a.parts_status_update_date <= to_date('"+ endDate +"','yyyy-MM-dd HH24:mi:ss')")}]]></Query>
+</TableData>
+<TableData name="ds2" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="partsTypeId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select t.parts_name,t.specification_model from PJWZ_PARTS_TYPE t where t.record_status=0 and t.idx='${partsTypeId}']]></Query>
+</TableData>
+</TableDataMap>
+<ReportWebAttr>
+<WebPageContent>
+<ToolBars>
+<ToolBarManager>
+<Location>
+<Embed position="1"/>
+</Location>
+<ToolBar>
+<Widget class="com.fr.report.web.ui.impl.page.First">
+<WidgetAttr/>
+<Text>
+<![CDATA[${i18n('ReportServerP-First')}]]></Text>
+<IconName>
+<![CDATA[first]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.page.Previous">
+<WidgetAttr/>
+<Text>
+<![CDATA[${i18n('ReportServerP-Previous')}]]></Text>
+<IconName>
+<![CDATA[previous]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.page.PageNavi">
+<WidgetAttr/>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.page.Next">
+<WidgetAttr/>
+<Text>
+<![CDATA[${i18n('ReportServerP-Next')}]]></Text>
+<IconName>
+<![CDATA[next]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.page.Last">
+<WidgetAttr/>
+<Text>
+<![CDATA[${i18n('ReportServerP-Last')}]]></Text>
+<IconName>
+<![CDATA[last]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.FlashPrint">
+<WidgetAttr/>
+<Text>
+<![CDATA[${i18n('Utils-Print[Client]A')}]]></Text>
+<IconName>
+<![CDATA[flashprint]]></IconName>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.Print">
+<WidgetAttr/>
+<Text>
+<![CDATA[${i18n('Print')}]]></Text>
+<IconName>
+<![CDATA[print]]></IconName>
+<PrintButtons/>
+</Widget>
+<Widget class="com.fr.report.web.ui.impl.Export">
+<WidgetAttr/>
+<Text>
+<![CDATA[${i18n('Export')}]]></Text>
+<IconName>
+<![CDATA[export]]></IconName>
+<Buttons pdf="true" excelP="true" excelO="true" excelS="true" word="true" image="true" html="true"/>
+</Widget>
+</ToolBar>
+</ToolBarManager>
+</ToolBars>
+<WebPage isPage="false" isShowAsImage="false" isAutoScale="false" isTDHeavy="false"/>
+</WebPageContent>
+</ReportWebAttr>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<RowHeight defaultValue="723900">
+<![CDATA[2971800,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[1409700,2743200,2743200,2590800,2743200,2438400,2743200,2247900,2743200,2171700,2743200,2171700,2743200,2743200,2438400,2209800,2232000,5524500,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="1" r="0" cs="17" s="0">
+<O>
+<![CDATA[自修配件周转台账]]></O>
+<Expand/>
+</C>
+<C c="1" r="1" s="1">
+<O>
+<![CDATA[配件名称：]]></O>
+<Expand/>
+</C>
+<C c="2" r="1" cs="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="PARTS_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="4" r="1" s="2">
+<O>
+<![CDATA[规格型号：]]></O>
+<Expand/>
+</C>
+<C c="5" r="1" cs="3" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="SPECIFICATION_MODEL"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="8" r="1" cs="2" s="1">
+<O>
+<![CDATA[状态修改日期：]]></O>
+<Expand/>
+</C>
+<C c="10" r="1" cs="3" s="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=$beginDate + " 至 " + $endDate]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="13" r="1" s="2">
+<Expand/>
+</C>
+<C c="14" r="1" s="1">
+<O>
+<![CDATA[统计日期：]]></O>
+<Expand/>
+</C>
+<C c="15" r="1" cs="3" s="2">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=TODAY()]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="0" r="2" rs="2" s="3">
+<O>
+<![CDATA[序号]]></O>
+<Expand/>
+</C>
+<C c="1" r="2" rs="2" s="3">
+<O>
+<![CDATA[编号]]></O>
+<Expand/>
+</C>
+<C c="2" r="2" cs="6" s="3">
+<O>
+<![CDATA[交旧]]></O>
+<Expand/>
+</C>
+<C c="8" r="2" cs="4" s="3">
+<O>
+<![CDATA[检修]]></O>
+<Expand/>
+</C>
+<C c="12" r="2" cs="4" s="3">
+<O>
+<![CDATA[领新]]></O>
+<Expand/>
+</C>
+<C c="16" r="2" rs="2" s="3">
+<O>
+<![CDATA[配件状态]]></O>
+<Expand/>
+</C>
+<C c="17" r="2" rs="2" s="3">
+<O>
+<![CDATA[备注]]></O>
+<Expand/>
+</C>
+<C c="2" r="3" s="3">
+<O>
+<![CDATA[下车日期]]></O>
+<Expand/>
+</C>
+<C c="3" r="3" s="3">
+<O>
+<![CDATA[下车机车]]></O>
+<Expand/>
+</C>
+<C c="4" r="3" s="3">
+<O>
+<![CDATA[下车原因]]></O>
+<Expand/>
+</C>
+<C c="5" r="3" s="3">
+<O>
+<![CDATA[修程]]></O>
+<Expand/>
+</C>
+<C c="6" r="3" s="3">
+<O>
+<![CDATA[入库日期]]></O>
+<Expand/>
+</C>
+<C c="7" r="3" s="3">
+<O>
+<![CDATA[交件人]]></O>
+<Expand/>
+</C>
+<C c="8" r="3" s="3">
+<O>
+<![CDATA[领件日期]]></O>
+<Expand/>
+</C>
+<C c="9" r="3" s="3">
+<O>
+<![CDATA[领件人]]></O>
+<Expand/>
+</C>
+<C c="10" r="3" s="3">
+<O>
+<![CDATA[交件日期]]></O>
+<Expand/>
+</C>
+<C c="11" r="3" s="3">
+<O>
+<![CDATA[交件人]]></O>
+<Expand/>
+</C>
+<C c="12" r="3" s="3">
+<O>
+<![CDATA[上车机车]]></O>
+<Expand/>
+</C>
+<C c="13" r="3" s="3">
+<O>
+<![CDATA[上车日期]]></O>
+<Expand/>
+</C>
+<C c="14" r="3" s="3">
+<O>
+<![CDATA[修程]]></O>
+<Expand/>
+</C>
+<C c="15" r="3" s="3">
+<O>
+<![CDATA[领件人]]></O>
+<Expand/>
+</C>
+<C c="0" r="4" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=&B5]]></Attributes>
+</O>
+<Expand leftParentDefault="false" left="B5"/>
+</C>
+<C c="1" r="4" s="4">
+<O t="DSColumn">
+<Attributes dsName="zx" columnName="PARTS_NO"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="4" s="4">
+<O t="DSColumn">
+<Attributes dsName="zx" columnName="UNLOAD_DATE"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="4" s="4">
+<O t="DSColumn">
+<Attributes dsName="zx" columnName="unloadTrain"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="4" r="4" s="4">
+<O t="DSColumn">
+<Attributes dsName="zx" columnName="UNLOAD_REASON"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="5" r="4" s="4">
+<O t="DSColumn">
+<Attributes dsName="zx" columnName="unloadRepair"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="6" r="4" s="4">
+<O t="DSColumn">
+<Attributes dsName="zx" columnName="owhdate"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="7" r="4" s="4">
+<O t="DSColumn">
+<Attributes dsName="zx" columnName="ohandoveremp"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="8" r="4" s="4">
+<O t="DSColumn">
+<Attributes dsName="zx" columnName="EX_WH_DATE"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="9" r="4" s="4">
+<O t="DSColumn">
+<Attributes dsName="zx" columnName="ogetemp"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="10" r="4" s="4">
+<O t="DSColumn">
+<Attributes dsName="zx" columnName="swhdate"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="11" r="4" s="4">
+<O t="DSColumn">
+<Attributes dsName="zx" columnName="shandoveremp"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="12" r="4" s="4">
+<O t="DSColumn">
+<Attributes dsName="zx" columnName="aboardTrain"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand/>
+</C>
+<C c="13" r="4" s="4">
+<O t="DSColumn">
+<Attributes dsName="zx" columnName="ABOARD_DATE"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="14" r="4" s="4">
+<O t="DSColumn">
+<Attributes dsName="zx" columnName="aboardRepair"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="15" r="4" s="4">
+<O t="DSColumn">
+<Attributes dsName="zx" columnName="sgetemp"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="16" r="4" s="4">
+<O t="DSColumn">
+<Attributes dsName="zx" columnName="PARTS_STATUS_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="17" r="4" s="4">
+<O t="DSColumn">
+<Attributes dsName="zx" columnName="remark"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<PaperSize width="30240000" height="50400000"/>
+<Margin top="986400" left="1447200" bottom="986400" right="1447200"/>
+</PaperSetting>
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+</ReportAttrSet>
+</Report>
+<ReportParameterAttr>
+<Attributes showWindow="true" delayPlaying="true" windowPosition="1" align="0"/>
+<PWTitle>
+<![CDATA[参数]]></PWTitle>
+</ReportParameterAttr>
+<StyleList>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="112"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="4" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Bottom style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Bottom style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="2" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

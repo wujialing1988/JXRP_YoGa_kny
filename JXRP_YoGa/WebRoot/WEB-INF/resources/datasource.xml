@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DatasourceManager xmlVersion="20120529" releaseVersion="7.0.0">
+<ConnectionMap>
+<Connection name="ydreport" class="com.fr.data.impl.JDBCDatabaseConnection">
+<DatabaseAttr/>
+<JDBCDatabaseAttr url="jdbc:oracle:thin:@10.2.4.160:1521:knydev" driver="oracle.jdbc.driver.OracleDriver" user="JX2_COREFRAME" password="___006a002a006c007d000500b8004e" encryptPassword="true">
+<DBCPAttr/>
+</JDBCDatabaseAttr>
+</Connection>
+</ConnectionMap>
+</DatasourceManager>

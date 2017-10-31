@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20120529" releaseVersion="7.0.0">
+<TableDataMap>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="tomorrowDate"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="searchDate"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select t1.*, t2.tomorrowNodeName
+  from (select a.idx,
+               a.train_type_shortname || '|' || a.train_no,
+               a.d_name,
+               a.delegate_d_name,
+               b.in_time,
+               a.begin_time,
+               d.nodeName,
+               e.workStationName,
+               round((a.plan_end_time - a.plan_begin_time) + 1, 2) planStateTime,
+               (case
+                 when (to_char(sysdate, 'yyyy-mm-dd') >
+                      to_char(a.end_time, 'yyyy-mm-dd')) then
+                  round((a.end_time - a.begin_time) + 1, 2)
+                 else
+                  round((sysdate - a.begin_time) + 1, 2)
+               end) as realStateTime,
+               a.train_no,
+               a.train_type_shortname,
+               a.repair_class_name,
+               a.repair_time_name,
+              a.plan_begin_time,
+              to_char(a.plan_end_time,'yyyy-mm-dd') as plan_end_time, a.REMARKS
+          from jxgc_train_work_plan a
+           left join (select * from ( SELECT T.*,ROW_NUMBER() OVER (PARTITION BY  T.train_no,T.train_type_shortname ORDER BY T.in_time)RV fROM twt_train_access_account T)  where RV=1) b  on a.train_no = b.train_no
+                                              and a.train_type_shortname =
+                                                  b.train_type_shortname
+         inner join (select t.work_plan_idx,
+                           wm_concat(t.node_name) as nodeName
+                      from (select c.work_plan_idx, c.node_name, c.parent_idx
+                              from jxgc_job_process_node c
+                             where c.record_status = 0
+                               and to_char(c.plan_begin_time, 'yyyy-mm-dd') <=
+                                   '${searchDate}'
+                               and to_char(c.plan_end_time, 'yyyy-mm-dd') >=
+                                   '${searchDate}'
+                                or (to_char(c.real_begin_time,
+                                                'yyyy-mm-dd') >= '${searchDate}' and to_char(c.real_begin_time, 'yyyy-mm-dd') <= '${searchDate}' )
+                             group by c.work_plan_idx,
+                                      c.node_name,
+                                      c.parent_idx) t
+                     where t.parent_idx is null
+                     group by t.work_plan_idx) d on d.work_plan_idx = a.idx
+          left join (select t.work_plan_idx,
+                           wm_concat(t.work_station_name) as workStationName
+                      from (select c.work_plan_idx, c.work_station_name
+                            
+                              from jxgc_job_process_node c
+                             where c.record_status = 0
+                               and to_char(c.plan_begin_time, 'yyyy-mm-dd') <=
+                                   '${searchDate}'
+                               and to_char(c.plan_end_time, 'yyyy-mm-dd') >=
+                                   '${searchDate}'
+                                or (to_char(c.real_begin_time,
+                                                'yyyy-mm-dd') >= '${searchDate}' and to_char(c.real_begin_time, 'yyyy-mm-dd') <= '${searchDate}' )
+                            
+                             group by c.work_plan_idx, c.work_station_name) t
+                    
+                     group by t.work_plan_idx) e on e.work_plan_idx = a.idx
+         where a.work_plan_status != 'TERMINATED'
+         and a.work_plan_status != 'COMPLETE'
+       and a.record_status = 0
+         and to_char(a.plan_begin_time, 'yyyy-mm-dd') <= '${searchDate}'
+           and to_char(a.plan_end_time, 'yyyy-mm-dd') >= '${searchDate}'
+            or (to_char(a.begin_time, 'yyyy-mm-dd') >= '${searchDate}' and a.work_plan_status != 'TERMINATED' and a.record_status = 0 and a.work_plan_status != 'COMPLETE')
+                             and (to_char(sysdate, 'yyyy-mm-dd') <= '${searchDate}' or to_char(a.begin_time, 'yyyy-mm-dd') <= '${searchDate}' )
+            ) t1
+  left join (select a.idx, d.nodeName as tomorrowNodeName
+               from jxgc_train_work_plan a
+               left join (select * from ( SELECT T.*,ROW_NUMBER() OVER (PARTITION BY  T.train_no,T.train_type_shortname ORDER BY T.in_time desc)RV fROM twt_train_access_account T)  where RV=1) b  on a.train_no =
+                                                       b.train_no
+                                                   
+                                                   and a.train_type_shortname =
+                                                       b.train_type_shortname
+               inner join (select t.work_plan_idx,
+                                wm_concat(t.node_name) as nodeName
+                           from (select c.work_plan_idx,
+                                        c.node_name,
+                                        c.parent_idx
+                                   from jxgc_job_process_node c
+                                  where c.record_status = 0
+                                    and to_char(c.plan_begin_time,
+                                                'yyyy-mm-dd') <= '${tomorrowDate}'
+                                    and to_char(c.plan_end_time, 'yyyy-mm-dd') >=
+                                        '${tomorrowDate}'
+                                     or (to_char(c.real_begin_time,
+                                                'yyyy-mm-dd') >= '${tomorrowDate}' and to_char(c.real_begin_time, 'yyyy-mm-dd') <= '${tomorrowDate}' )
+                                 
+                                  group by c.work_plan_idx,
+                                           c.node_name,
+                                           c.parent_idx) t
+                          where t.parent_idx is null
+                          group by t.work_plan_idx) d on d.work_plan_idx =
+                                                         a.idx
+               left join (select t.work_plan_idx,
+                                wm_concat(t.work_station_name) as workStationName
+                           from (select c.work_plan_idx, c.work_station_name
+                                 
+                                   from jxgc_job_process_node c
+                                  where c.record_status = 0
+                                    and to_char(c.plan_begin_time,
+                                                'yyyy-mm-dd') <= '${tomorrowDate}'
+                                    and to_char(c.plan_end_time, 'yyyy-mm-dd') >=
+                                        '${tomorrowDate}'
+                                     or (to_char(c.real_begin_time,
+                                                'yyyy-mm-dd') >= '${tomorrowDate}' and to_char(c.real_begin_time, 'yyyy-mm-dd') <= '${tomorrowDate}' )
+                                 
+                                  group by c.work_plan_idx,
+                                           c.work_station_name) t
+                         
+                          group by t.work_plan_idx) e on e.work_plan_idx =
+                                                         a.idx
+              where a.work_plan_status != 'TERMINATED'
+              and a.work_plan_status != 'COMPLETE'
+             and a.record_status = 0
+              and to_char(a.plan_begin_time, 'yyyy-mm-dd') <= '${tomorrowDate}'
+                and to_char(a.plan_end_time, 'yyyy-mm-dd') >= '${tomorrowDate}'
+                 or (to_char(a.begin_time, 'yyyy-mm-dd') >= '${tomorrowDate}' and a.work_plan_status != 'TERMINATED' and a.record_status = 0 and a.work_plan_status != 'COMPLETE'
+                 and (to_char(sysdate, 'yyyy-mm-dd') <= '${tomorrowDate}' or to_char(a.begin_time, 'yyyy-mm-dd') <= '${tomorrowDate}' )  
+                 )
+                  
+                 ) t2 on t1.idx = t2.idx]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<RowHeight defaultValue="723900">
+<![CDATA[2971800,1219200,723900,723900,723900,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[1447800,2552700,2209800,1866900,2095500,3124200,3390900,6781800,2590800,6591300,2247900,2362200,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="0" r="0" cs="12" s="0">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=CONCATENATE($searchDate,'机车检修动态')]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="0" r="1" s="1">
+<O>
+<![CDATA[序号]]></O>
+<Expand/>
+</C>
+<C c="1" r="1" s="1">
+<O>
+<![CDATA[机车型号]]></O>
+<Expand/>
+</C>
+<C c="2" r="1" s="1">
+<O>
+<![CDATA[修程]]></O>
+<Expand/>
+</C>
+<C c="3" r="1" s="1">
+<O>
+<![CDATA[配属段]]></O>
+<Expand/>
+</C>
+<C c="4" r="1" s="1">
+<O>
+<![CDATA[委修段]]></O>
+<Expand/>
+</C>
+<C c="5" r="1" s="1">
+<O>
+<![CDATA[入段日期]]></O>
+<Expand/>
+</C>
+<C c="6" r="1" s="1">
+<O>
+<![CDATA[检修开始日期]]></O>
+<Expand/>
+</C>
+<C c="7" r="1" s="1">
+<O>
+<![CDATA[当日计划]]></O>
+<Expand/>
+</C>
+<C c="8" r="1" s="1">
+<O>
+<![CDATA[当前工位]]></O>
+<Expand/>
+</C>
+<C c="9" r="1" s="1">
+<O>
+<![CDATA[明日计划]]></O>
+<Expand/>
+</C>
+<C c="10" r="1" s="1">
+<O>
+<![CDATA[计划停时]]></O>
+<Expand/>
+</C>
+<C c="11" r="1" s="1">
+<O>
+<![CDATA[实际停时]]></O>
+<Expand/>
+</C>
+<C c="0" r="2" s="1">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=&B3]]></Attributes>
+</O>
+<Expand leftParentDefault="false" left="B3"/>
+</C>
+<C c="1" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="A.TRAIN_TYPE_SHORTNAME||&apos;|&apos;||A.TRAIN_NO"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="2" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="A.REPAIR_CLASS_NAME||&apos;&apos;||A.REPAIR_TIME_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="D_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="4" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="DELEGATE_D_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="5" r="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="IN_TIME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="6" r="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="BEGIN_TIME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="7" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="NODENAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="8" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="WORKSTATIONNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="9" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="TOMORROWNODENAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="10" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="PLANSTATETIME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="11" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="REALSTATETIME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<Margin top="986400" left="2743200" bottom="986400" right="2743200"/>
+</PaperSetting>
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+</ReportAttrSet>
+</Report>
+<StyleList>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="160"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<Format class="java.text.SimpleDateFormat">
+<![CDATA[yyyy-MM-dd]]></Format>
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<Format class="java.text.DecimalFormat">
+<![CDATA[#0.0]]></Format>
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

@@ -1,0 +1,58 @@
+
+
+.parameter-container-collapse{
+display:none
+}
+.fr-layout-border-panel-north {
+background-color:#D6E3F2;
+}
+.report-background{
+left:10% !important;
+width:80% !important;
+}
+.page-block {
+width:100% !important;
+height:80%;
+}
+ .x-table {
+width:100% !important;
+}
+.pageContentDIV{
+  width:50% !important;
+}
+.frozen-west{
+display:none !important;
+}
+.frozen-corner{
+display:none !important;
+}
+
+.x-toolbar{
+color: #15428b;
+font-weight: bold;
+font-size: 11px;
+font-family: tahoma,arial,verdana,sans-serif;
+border-color: #99bbe8;
+background-image: url(../images/white-top-bottom.gif);
+overflow-y:hidden !important;
+border-bottom-color: #99bbe8;
+border-width: 0 0 1px;
+border-style: solid;
+}
+
+.fr-texteditor{
+height: 17px !important;
+}
+
+.fr-layout-border{
+position: static !important;
+/*position:initial !important;*/
+}
+
+.frozen-north{
+background: url(../images/header.gif) repeat-x scroll left top #e2e4e6;
+}
+
+
+
+

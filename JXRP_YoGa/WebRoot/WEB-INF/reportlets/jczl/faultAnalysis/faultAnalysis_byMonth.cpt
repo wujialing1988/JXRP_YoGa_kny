@@ -1,0 +1,2976 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20120529" releaseVersion="7.0.0">
+<TableDataMap>
+<TableData name="01" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="plantOrgId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="bId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="years"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="faultType"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="dId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select org.orgname,
+       org.orgid,
+       count(f.idx) as "faultCount",
+       count(distinct f.train_type_idx || f.train_No) as "trainCount"
+  from om_organization org
+  left join (select f.repair_team,
+                    f.repair_team_orgseq,
+                    f.complete_time,
+                    f.train_type_idx,
+                    f.train_No,
+                    f.idx
+               from jczl_train n
+               left join JXGC_Fault_Ticket f on n.train_type_idx =
+                                                f.train_type_idx
+                                            and n.train_no = f.train_no
+                                             ${if(len(bId) == 0,"","and n.b_id = '" + bId +"'")}
+                                             ${if(len(dId) == 0,"","and n.d_id = '" + dId +"'")}
+              where f.record_status = 0
+                and f.type = '${faultType}'
+                and to_char(f.complete_time, 'yyyy') = '${years}'
+                and to_char(f.complete_time, 'MM') = '01') f on instr(f.repair_team_orgseq,
+                                                                      org.orgseq) > 0
+ where org.orgid in (${plantOrgId})
+ group by org.orgid, org.orgname]]></Query>
+</TableData>
+<TableData name="02" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="plantOrgId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="bId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="years"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="faultType"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="dId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select org.orgname,
+       org.orgid,
+       count(f.idx) as "faultCount",
+       count(distinct f.train_type_idx || f.train_No) as "trainCount"
+  from om_organization org
+  left join (select f.repair_team,
+	          f.repair_team_orgseq,
+                    f.complete_time,
+                    f.train_type_idx,
+                    f.train_No,
+                    f.idx
+               from jczl_train n
+               left join JXGC_Fault_Ticket f on n.train_type_idx =
+                                                f.train_type_idx
+                                            and n.train_no = f.train_no
+                                             ${if(len(bId) == 0,"","and n.b_id = '" + bId +"'")}
+                                             ${if(len(dId) == 0,"","and n.d_id = '" + dId +"'")}
+              where f.record_status = 0
+                and f.type = '${faultType}'
+                and to_char(f.complete_time, 'yyyy') = '${years}'
+                and to_char(f.complete_time, 'MM') = '02') f on instr(f.repair_team_orgseq,
+                                                                      org.orgseq) > 0
+ where org.orgid in (${plantOrgId})
+ group by org.orgid, org.orgname]]></Query>
+</TableData>
+<TableData name="03" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="plantOrgId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="bId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="years"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="faultType"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="dId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select org.orgname,
+       org.orgid,
+       count(f.idx) as "faultCount",
+       count(distinct f.train_type_idx || f.train_No) as "trainCount"
+  from om_organization org
+  left join (select f.repair_team,
+	          f.repair_team_orgseq,
+                    f.complete_time,
+                    f.train_type_idx,
+                    f.train_No,
+                    f.idx
+               from jczl_train n
+               left join JXGC_Fault_Ticket f on n.train_type_idx =
+                                                f.train_type_idx
+                                            and n.train_no = f.train_no
+                                             ${if(len(bId) == 0,"","and n.b_id = '" + bId +"'")}
+                                             ${if(len(dId) == 0,"","and n.d_id = '" + dId +"'")}
+              where f.record_status = 0
+                and f.type = '${faultType}'
+                and to_char(f.complete_time, 'yyyy') = '${years}'
+                and to_char(f.complete_time, 'MM') = '03') f on instr(f.repair_team_orgseq,
+                                                                      org.orgseq) > 0
+ where org.orgid in (${plantOrgId})
+ group by org.orgid, org.orgname]]></Query>
+</TableData>
+<TableData name="04" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="plantOrgId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="bId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="years"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="faultType"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="dId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select org.orgname,
+       org.orgid,
+       count(f.idx) as "faultCount",
+       count(distinct f.train_type_idx || f.train_No) as "trainCount"
+  from om_organization org
+  left join (select f.repair_team,
+	          f.repair_team_orgseq,
+                    f.complete_time,
+                    f.train_type_idx,
+                    f.train_No,
+                    f.idx
+               from jczl_train n
+               left join JXGC_Fault_Ticket f on n.train_type_idx =
+                                                f.train_type_idx
+                                            and n.train_no = f.train_no
+                                             ${if(len(bId) == 0,"","and n.b_id = '" + bId +"'")}
+                                             ${if(len(dId) == 0,"","and n.d_id = '" + dId +"'")}
+              where f.record_status = 0
+                and f.type = '${faultType}'
+                and to_char(f.complete_time, 'yyyy') = '${years}'
+                and to_char(f.complete_time, 'MM') = '04') f on instr(f.repair_team_orgseq,
+                                                                      org.orgseq) > 0
+ where org.orgid in (${plantOrgId})
+ group by org.orgid, org.orgname]]></Query>
+</TableData>
+<TableData name="05" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="plantOrgId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="bId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="years"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="faultType"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="dId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select org.orgname,
+       org.orgid,
+       count(f.idx) as "faultCount",
+       count(distinct f.train_type_idx || f.train_No) as "trainCount"
+  from om_organization org
+  left join (select f.repair_team,
+	          f.repair_team_orgseq,
+                    f.complete_time,
+                    f.train_type_idx,
+                    f.train_No,
+                    f.idx
+               from jczl_train n
+               left join JXGC_Fault_Ticket f on n.train_type_idx =
+                                                f.train_type_idx
+                                            and n.train_no = f.train_no
+                                             ${if(len(bId) == 0,"","and n.b_id = '" + bId +"'")}
+                                             ${if(len(dId) == 0,"","and n.d_id = '" + dId +"'")}
+              where f.record_status = 0
+                and f.type = '${faultType}'
+                and to_char(f.complete_time, 'yyyy') = '${years}'
+                and to_char(f.complete_time, 'MM') = '05') f on instr(f.repair_team_orgseq,
+                                                                      org.orgseq) > 0
+ where org.orgid in (${plantOrgId})
+ group by org.orgid, org.orgname]]></Query>
+</TableData>
+<TableData name="06" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="plantOrgId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="bId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="years"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="faultType"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="dId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select org.orgname,
+       org.orgid,
+       count(f.idx) as "faultCount",
+       count(distinct f.train_type_idx || f.train_No) as "trainCount"
+  from om_organization org
+  left join (select f.repair_team,
+	          f.repair_team_orgseq,
+                    f.complete_time,
+                    f.train_type_idx,
+                    f.train_No,
+                    f.idx
+               from jczl_train n
+               left join JXGC_Fault_Ticket f on n.train_type_idx =
+                                                f.train_type_idx
+                                            and n.train_no = f.train_no
+                                             ${if(len(bId) == 0,"","and n.b_id = '" + bId +"'")}
+                                             ${if(len(dId) == 0,"","and n.d_id = '" + dId +"'")}
+              where f.record_status = 0
+                and f.type = '${faultType}'
+                and to_char(f.complete_time, 'yyyy') = '${years}'
+                and to_char(f.complete_time, 'MM') = '06') f on instr(f.repair_team_orgseq,
+                                                                      org.orgseq) > 0
+ where org.orgid in (${plantOrgId})
+ group by org.orgid, org.orgname]]></Query>
+</TableData>
+<TableData name="07" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="plantOrgId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="bId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="years"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="faultType"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="dId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select org.orgname,
+       org.orgid,
+       count(f.idx) as "faultCount",
+       count(distinct f.train_type_idx || f.train_No) as "trainCount"
+  from om_organization org
+  left join (select f.repair_team,
+	          f.repair_team_orgseq,
+                    f.complete_time,
+                    f.train_type_idx,
+                    f.train_No,
+                    f.idx
+               from jczl_train n
+               left join JXGC_Fault_Ticket f on n.train_type_idx =
+                                                f.train_type_idx
+                                            and n.train_no = f.train_no
+                                             ${if(len(bId) == 0,"","and n.b_id = '" + bId +"'")}
+                                             ${if(len(dId) == 0,"","and n.d_id = '" + dId +"'")}
+              where f.record_status = 0
+                and f.type = '${faultType}'
+                and to_char(f.complete_time, 'yyyy') = '${years}'
+                and to_char(f.complete_time, 'MM') = '07') f on instr(f.repair_team_orgseq,
+                                                                      org.orgseq) > 0
+ where org.orgid in (${plantOrgId})
+ group by org.orgid, org.orgname]]></Query>
+</TableData>
+<TableData name="08" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="plantOrgId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="bId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="years"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="faultType"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="dId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select org.orgname,
+       org.orgid,
+       count(f.idx) as "faultCount",
+       count(distinct f.train_type_idx || f.train_No) as "trainCount"
+  from om_organization org
+  left join (select f.repair_team,
+	          f.repair_team_orgseq,
+                    f.complete_time,
+                    f.train_type_idx,
+                    f.train_No,
+                    f.idx
+               from jczl_train n
+               left join JXGC_Fault_Ticket f on n.train_type_idx =
+                                                f.train_type_idx
+                                            and n.train_no = f.train_no
+                                             ${if(len(bId) == 0,"","and n.b_id = '" + bId +"'")}
+                                             ${if(len(dId) == 0,"","and n.d_id = '" + dId +"'")}
+              where f.record_status = 0
+                and f.type = '${faultType}'
+                and to_char(f.complete_time, 'yyyy') = '${years}'
+                and to_char(f.complete_time, 'MM') = '08') f on instr(f.repair_team_orgseq,
+                                                                      org.orgseq) > 0
+ where org.orgid in (${plantOrgId})
+ group by org.orgid, org.orgname]]></Query>
+</TableData>
+<TableData name="09" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="plantOrgId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="bId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="years"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="faultType"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="dId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select org.orgname,
+       org.orgid,
+       count(f.idx) as "faultCount",
+       count(distinct f.train_type_idx || f.train_No) as "trainCount"
+  from om_organization org
+  left join (select f.repair_team,
+	          f.repair_team_orgseq,
+                    f.complete_time,
+                    f.train_type_idx,
+                    f.train_No,
+                    f.idx
+               from jczl_train n
+               left join JXGC_Fault_Ticket f on n.train_type_idx =
+                                                f.train_type_idx
+                                            and n.train_no = f.train_no
+                                             ${if(len(bId) == 0,"","and n.b_id = '" + bId +"'")}
+                                             ${if(len(dId) == 0,"","and n.d_id = '" + dId +"'")}
+              where f.record_status = 0
+                and f.type = '${faultType}'
+                and to_char(f.complete_time, 'yyyy') = '${years}'
+                and to_char(f.complete_time, 'MM') = '09') f on instr(f.repair_team_orgseq,
+                                                                      org.orgseq) > 0
+ where org.orgid in (${plantOrgId})
+ group by org.orgid, org.orgname]]></Query>
+</TableData>
+<TableData name="10" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="plantOrgId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="bId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="years"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="faultType"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="dId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select org.orgname,
+       org.orgid,
+       count(f.idx) as "faultCount",
+       count(distinct f.train_type_idx || f.train_No) as "trainCount"
+  from om_organization org
+  left join (select f.repair_team,
+	          f.repair_team_orgseq,
+                    f.complete_time,
+                    f.train_type_idx,
+                    f.train_No,
+                    f.idx
+               from jczl_train n
+               left join JXGC_Fault_Ticket f on n.train_type_idx =
+                                                f.train_type_idx
+                                            and n.train_no = f.train_no
+                                             ${if(len(bId) == 0,"","and n.b_id = '" + bId +"'")}
+                                             ${if(len(dId) == 0,"","and n.d_id = '" + dId +"'")}
+              where f.record_status = 0
+                and f.type = '${faultType}'
+                and to_char(f.complete_time, 'yyyy') = '${years}'
+                and to_char(f.complete_time, 'MM') = '10') f on instr(f.repair_team_orgseq,
+                                                                      org.orgseq) > 0
+ where org.orgid in (${plantOrgId})
+ group by org.orgid, org.orgname]]></Query>
+</TableData>
+<TableData name="11" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="plantOrgId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="bId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="years"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="faultType"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="dId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select org.orgname,
+       org.orgid,
+       count(f.idx) as "faultCount",
+       count(distinct f.train_type_idx || f.train_No) as "trainCount"
+  from om_organization org
+  left join (select f.repair_team,
+	          f.repair_team_orgseq,
+                    f.complete_time,
+                    f.train_type_idx,
+                    f.train_No,
+                    f.idx
+               from jczl_train n
+               left join JXGC_Fault_Ticket f on n.train_type_idx =
+                                                f.train_type_idx
+                                            and n.train_no = f.train_no
+                                             ${if(len(bId) == 0,"","and n.b_id = '" + bId +"'")}
+                                             ${if(len(dId) == 0,"","and n.d_id = '" + dId +"'")}
+              where f.record_status = 0
+                and f.type = '${faultType}'
+                and to_char(f.complete_time, 'yyyy') = '${years}'
+                and to_char(f.complete_time, 'MM') = '11') f on instr(f.repair_team_orgseq,
+                                                                      org.orgseq) > 0
+ where org.orgid in (${plantOrgId})
+ group by org.orgid, org.orgname]]></Query>
+</TableData>
+<TableData name="12" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="plantOrgId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="bId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="years"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="faultType"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="dId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[select org.orgname,
+       org.orgid,
+       count(f.idx) as "faultCount",
+       count(distinct f.train_type_idx || f.train_No) as "trainCount"
+  from om_organization org
+  left join (select f.repair_team,
+	          f.repair_team_orgseq,
+                    f.complete_time,
+                    f.train_type_idx,
+                    f.train_No,
+                    f.idx
+               from jczl_train n
+               left join JXGC_Fault_Ticket f on n.train_type_idx =
+                                                f.train_type_idx
+                                            and n.train_no = f.train_no
+                                             ${if(len(bId) == 0,"","and n.b_id = '" + bId +"'")}
+                                             ${if(len(dId) == 0,"","and n.d_id = '" + dId +"'")}
+              where f.record_status = 0
+                and f.type = '${faultType}'
+                and to_char(f.complete_time, 'yyyy') = '${years}'
+                and to_char(f.complete_time, 'MM') = '12') f on instr(f.repair_team_orgseq,
+                                                                      org.orgseq) > 0
+ where org.orgid in (${plantOrgId})
+ group by org.orgid, org.orgname]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR F="0" T="2"/>
+<FR/>
+<HC F="0" T="1"/>
+<FC F="3" T="3"/>
+</ReportPageAttr>
+<RowHeight defaultValue="723900">
+<![CDATA[723900,723900,1219200,723900,723900,723900,723900,0,723900,723900,723900,723900,723900,723900,0,723900,723900,723900,723900,723900,723900,0,723900,723900,723900,723900,723900,723900,0,723900,723900,723900,723900,723900,723900,0,723900,723900,723900,723900,723900,723900,0,723900,723900,723900,723900,723900,723900,0,723900,723900,723900,723900,723900,723900,0,723900,723900,723900,723900,723900,723900,0,723900,723900,723900,723900,723900,723900,0,723900,723900,723900,723900,723900,723900,0,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[3124200,5219700,3314700,3810000,2743200,2743200,2743200,2743200,2743200,2743200,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="0" r="0" cs="4" rs="2" s="0">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=$orgName + $years + "年度" + $faultTypeName + "质量分析统计"]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="0" r="2" cs="2" s="1">
+<O t="BiasTextPainter">
+<IsBackSlash value="false"/>
+<![CDATA[班组|月度]]></O>
+<Expand/>
+</C>
+<C c="2" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="01" columnName="ORGNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="1"/>
+</C>
+<C c="3" r="2" s="2">
+<O>
+<![CDATA[小计]]></O>
+<Expand/>
+</C>
+<C c="0" r="3" rs="4" s="2">
+<O>
+<![CDATA[一月]]></O>
+<Expand/>
+</C>
+<C c="1" r="3" s="3">
+<O>
+<![CDATA[件数(件)]]></O>
+<Expand/>
+</C>
+<C c="2" r="3" s="4">
+<O t="DSColumn">
+<Attributes dsName="01" columnName="faultCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="详情">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="title"/>
+<O>
+<![CDATA[统计明细]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jczl/faultAnalysis/faultAnalysis_detail_byMonth.cpt]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&bId="+$bId+"&dId="+$dId+"&month=01"+"&teamName="+C3+"&years="+$years+"&faultType="+$faultType+"&faultTypeName="+$faultTypeName]]></Attributes>
+</O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false" up="C3"/>
+</C>
+<C c="3" r="3" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C4)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="4" s="3">
+<O>
+<![CDATA[件数比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="4" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C4 / D4]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="3" r="4" s="5">
+<Expand/>
+</C>
+<C c="1" r="5" s="3">
+<O>
+<![CDATA[台数(台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="5" s="5">
+<O t="DSColumn">
+<Attributes dsName="01" columnName="trainCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" upParentDefault="false" up="C3"/>
+</C>
+<C c="3" r="5" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C6)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="6" s="3">
+<O>
+<![CDATA[单台件数(件/台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="6" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C4 / C6]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="3" r="6" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=AVERAGE(C7)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="0" r="7" cs="2" s="1">
+<O t="BiasTextPainter">
+<IsBackSlash value="false"/>
+<![CDATA[班组|月度]]></O>
+<Expand/>
+</C>
+<C c="2" r="7" s="2">
+<O t="DSColumn">
+<Attributes dsName="02" columnName="ORGNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="7" s="2">
+<O>
+<![CDATA[小计]]></O>
+<Expand/>
+</C>
+<C c="0" r="8" rs="6" s="2">
+<O>
+<![CDATA[二月]]></O>
+<Expand/>
+</C>
+<C c="1" r="8" s="3">
+<O>
+<![CDATA[件数(件)]]></O>
+<Expand/>
+</C>
+<C c="2" r="8" s="4">
+<O t="DSColumn">
+<Attributes dsName="02" columnName="faultCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&bId="+$bId+"&dId="+$dId+"&month=02"+"&teamName="+C8+"&years="+$years+"&faultType="+$faultType+"&faultTypeName="+$faultTypeName]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="title"/>
+<O>
+<![CDATA[统计明细]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jczl/faultAnalysis/faultAnalysis_detail_byMonth.cpt]]></O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false" up="C8"/>
+</C>
+<C c="3" r="8" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C9)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="9" s="3">
+<O>
+<![CDATA[件数比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="9" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C9 / D9]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="3" r="9" s="5">
+<O>
+<![CDATA[]]></O>
+<Expand/>
+</C>
+<C c="1" r="10" s="3">
+<O>
+<![CDATA[同比上月增减数]]></O>
+<Expand/>
+</C>
+<C c="2" r="10" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C9 - C4]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="10" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=D9-D4]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="1" r="11" s="3">
+<O>
+<![CDATA[同比上月增减比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="11" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF((C4==0),(C9-C4),((C9-C4)/C4))]]></Attributes>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="11" s="5">
+<Expand/>
+</C>
+<C c="1" r="12" s="3">
+<O>
+<![CDATA[台数(台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="12" s="5">
+<O t="DSColumn">
+<Attributes dsName="02" columnName="trainCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="12" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C13)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="13" s="3">
+<O>
+<![CDATA[单台件数(件/台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="13" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C9 / C13]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="13" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=AVERAGE(C14)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="0" r="14" cs="2" s="1">
+<O t="BiasTextPainter">
+<IsBackSlash value="false"/>
+<![CDATA[班组|月度]]></O>
+<Expand/>
+</C>
+<C c="2" r="14" s="2">
+<O t="DSColumn">
+<Attributes dsName="03" columnName="ORGNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="14" s="2">
+<O>
+<![CDATA[小计]]></O>
+<Expand/>
+</C>
+<C c="0" r="15" rs="6" s="2">
+<O>
+<![CDATA[三月]]></O>
+<Expand/>
+</C>
+<C c="1" r="15" s="3">
+<O>
+<![CDATA[件数(件)]]></O>
+<Expand/>
+</C>
+<C c="2" r="15" s="4">
+<O t="DSColumn">
+<Attributes dsName="03" columnName="faultCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&bId="+$bId+"&dId="+$dId+"&month=03"+"&teamName="+C15+"&years="+$years+"&faultType="+$faultType+"&faultTypeName="+$faultTypeName]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="title"/>
+<O>
+<![CDATA[统计明细]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jczl/faultAnalysis/faultAnalysis_detail_byMonth.cpt]]></O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false" up="C15"/>
+</C>
+<C c="3" r="15" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C16)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="16" s="3">
+<O>
+<![CDATA[件数比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="16" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C16 / D16]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="3" r="16" s="5">
+<O>
+<![CDATA[]]></O>
+<Expand/>
+</C>
+<C c="1" r="17" s="3">
+<O>
+<![CDATA[同比上月增减数]]></O>
+<Expand/>
+</C>
+<C c="2" r="17" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C16 - C9]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="17" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=D16-D9]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="1" r="18" s="3">
+<O>
+<![CDATA[同比上月增减比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="18" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF((C9==0),(C16-C9),((C16-C9)/C9))]]></Attributes>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="18" s="5">
+<Expand/>
+</C>
+<C c="1" r="19" s="3">
+<O>
+<![CDATA[台数(台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="19" s="5">
+<O t="DSColumn">
+<Attributes dsName="03" columnName="trainCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="19" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C20)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="20" s="3">
+<O>
+<![CDATA[单台件数(件/台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="20" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C16 / C20]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="20" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=AVERAGE(C21)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="0" r="21" cs="2" s="1">
+<O t="BiasTextPainter">
+<IsBackSlash value="false"/>
+<![CDATA[班组|月度]]></O>
+<Expand/>
+</C>
+<C c="2" r="21" s="2">
+<O t="DSColumn">
+<Attributes dsName="04" columnName="ORGNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="21" s="2">
+<O>
+<![CDATA[小计]]></O>
+<Expand/>
+</C>
+<C c="0" r="22" rs="6" s="2">
+<O>
+<![CDATA[四月]]></O>
+<Expand/>
+</C>
+<C c="1" r="22" s="3">
+<O>
+<![CDATA[件数(件)]]></O>
+<Expand/>
+</C>
+<C c="2" r="22" s="4">
+<O t="DSColumn">
+<Attributes dsName="04" columnName="faultCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&bId="+$bId+"&dId="+$dId+"&month=04"+"&teamName="+C22+"&years="+$years+"&faultType="+$faultType+"&faultTypeName="+$faultTypeName]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="title"/>
+<O>
+<![CDATA[统计明细]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jczl/faultAnalysis/faultAnalysis_detail_byMonth.cpt]]></O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false" up="C22"/>
+</C>
+<C c="3" r="22" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C23)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="23" s="3">
+<O>
+<![CDATA[件数比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="23" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C23 / D23]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="3" r="23" s="5">
+<O>
+<![CDATA[]]></O>
+<Expand/>
+</C>
+<C c="1" r="24" s="3">
+<O>
+<![CDATA[同比上月增减数]]></O>
+<Expand/>
+</C>
+<C c="2" r="24" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C23 - C16]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="24" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=D23-D16]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="1" r="25" s="3">
+<O>
+<![CDATA[同比上月增减比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="25" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(C16==0,C23-C16,(C23-C16)/C16)]]></Attributes>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="25" s="5">
+<Expand/>
+</C>
+<C c="1" r="26" s="3">
+<O>
+<![CDATA[台数(台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="26" s="5">
+<O t="DSColumn">
+<Attributes dsName="04" columnName="trainCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="26" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C27)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="27" s="3">
+<O>
+<![CDATA[单台件数(件/台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="27" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C23 / C27]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="27" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=AVERAGE(C28)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="0" r="28" cs="2" s="1">
+<O t="BiasTextPainter">
+<IsBackSlash value="false"/>
+<![CDATA[班组|月度]]></O>
+<Expand/>
+</C>
+<C c="2" r="28" s="2">
+<O t="DSColumn">
+<Attributes dsName="05" columnName="ORGNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="28" s="2">
+<O>
+<![CDATA[小计]]></O>
+<Expand/>
+</C>
+<C c="0" r="29" rs="6" s="2">
+<O>
+<![CDATA[五月]]></O>
+<Expand/>
+</C>
+<C c="1" r="29" s="3">
+<O>
+<![CDATA[件数(件)]]></O>
+<Expand/>
+</C>
+<C c="2" r="29" s="4">
+<O t="DSColumn">
+<Attributes dsName="05" columnName="faultCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&bId="+$bId+"&dId="+$dId+"&month=05"+"&teamName="+C29+"&years="+$years+"&faultType="+$faultType+"&faultTypeName="+$faultTypeName]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="title"/>
+<O>
+<![CDATA[统计明细]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jczl/faultAnalysis/faultAnalysis_detail_byMonth.cpt]]></O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false" up="C29"/>
+</C>
+<C c="3" r="29" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C30)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="30" s="3">
+<O>
+<![CDATA[件数比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="30" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C30 / D30]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="3" r="30" s="5">
+<O>
+<![CDATA[]]></O>
+<Expand/>
+</C>
+<C c="1" r="31" s="3">
+<O>
+<![CDATA[同比上月增减数]]></O>
+<Expand/>
+</C>
+<C c="2" r="31" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C30 - C23]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="31" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=D30-D23]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="1" r="32" s="3">
+<O>
+<![CDATA[同比上月增减比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="32" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(C23==0,C30-C23,(C30-C23)/C23)]]></Attributes>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="32" s="5">
+<Expand/>
+</C>
+<C c="1" r="33" s="3">
+<O>
+<![CDATA[台数(台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="33" s="5">
+<O t="DSColumn">
+<Attributes dsName="05" columnName="trainCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="33" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C34)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="34" s="3">
+<O>
+<![CDATA[单台件数(件/台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="34" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C30 / C34]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="34" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=AVERAGE(C35)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="0" r="35" cs="2" s="1">
+<O t="BiasTextPainter">
+<IsBackSlash value="false"/>
+<![CDATA[班组|月度]]></O>
+<Expand/>
+</C>
+<C c="2" r="35" s="2">
+<O t="DSColumn">
+<Attributes dsName="06" columnName="ORGNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="35" s="2">
+<O>
+<![CDATA[小计]]></O>
+<Expand/>
+</C>
+<C c="0" r="36" rs="6" s="2">
+<O>
+<![CDATA[六月]]></O>
+<Expand/>
+</C>
+<C c="1" r="36" s="3">
+<O>
+<![CDATA[件数(件)]]></O>
+<Expand/>
+</C>
+<C c="2" r="36" s="4">
+<O t="DSColumn">
+<Attributes dsName="06" columnName="faultCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&bId="+$bId+"&dId="+$dId+"&month=06"+"&teamName="+C36+"&years="+$years+"&faultType="+$faultType+"&faultTypeName="+$faultTypeName]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="title"/>
+<O>
+<![CDATA[统计明细]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jczl/faultAnalysis/faultAnalysis_detail_byMonth.cpt]]></O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false" up="C36"/>
+</C>
+<C c="3" r="36" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C37)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="37" s="3">
+<O>
+<![CDATA[件数比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="37" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C37 / D37]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="3" r="37" s="5">
+<O>
+<![CDATA[]]></O>
+<Expand/>
+</C>
+<C c="1" r="38" s="3">
+<O>
+<![CDATA[同比上月增减数]]></O>
+<Expand/>
+</C>
+<C c="2" r="38" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C37 - C30]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="38" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=D37-D30]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="1" r="39" s="3">
+<O>
+<![CDATA[同比上月增减比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="39" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(C30==0,C37-C30,(C37-C30)/C30)]]></Attributes>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="39" s="5">
+<Expand/>
+</C>
+<C c="1" r="40" s="3">
+<O>
+<![CDATA[台数(台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="40" s="5">
+<O t="DSColumn">
+<Attributes dsName="06" columnName="trainCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="40" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C41)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="41" s="3">
+<O>
+<![CDATA[单台件数(件/台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="41" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C37 / C41]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="41" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=AVERAGE(C42)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="0" r="42" cs="2" s="1">
+<O t="BiasTextPainter">
+<IsBackSlash value="false"/>
+<![CDATA[班组|月度]]></O>
+<Expand/>
+</C>
+<C c="2" r="42" s="2">
+<O t="DSColumn">
+<Attributes dsName="07" columnName="ORGNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="42" s="2">
+<O>
+<![CDATA[小计]]></O>
+<Expand/>
+</C>
+<C c="0" r="43" rs="6" s="2">
+<O>
+<![CDATA[七月]]></O>
+<Expand/>
+</C>
+<C c="1" r="43" s="3">
+<O>
+<![CDATA[件数(件)]]></O>
+<Expand/>
+</C>
+<C c="2" r="43" s="4">
+<O t="DSColumn">
+<Attributes dsName="07" columnName="faultCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&bId="+$bId+"&dId="+$dId+"&month=07"+"&teamName="+C43+"&years="+$years+"&faultType="+$faultType+"&faultTypeName="+$faultTypeName]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="title"/>
+<O>
+<![CDATA[统计明细]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jczl/faultAnalysis/faultAnalysis_detail_byMonth.cpt]]></O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false" up="C43"/>
+</C>
+<C c="3" r="43" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C44)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="44" s="3">
+<O>
+<![CDATA[件数比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="44" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C44 / D44]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="3" r="44" s="5">
+<O>
+<![CDATA[]]></O>
+<Expand/>
+</C>
+<C c="1" r="45" s="3">
+<O>
+<![CDATA[同比上月增减数]]></O>
+<Expand/>
+</C>
+<C c="2" r="45" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C44 - C37]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="45" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=D44-D37]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="1" r="46" s="3">
+<O>
+<![CDATA[同比上月增减比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="46" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(C37==0,C44-C37,(C44-C37)/C37)]]></Attributes>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="46" s="5">
+<Expand/>
+</C>
+<C c="1" r="47" s="3">
+<O>
+<![CDATA[台数(台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="47" s="5">
+<O t="DSColumn">
+<Attributes dsName="07" columnName="trainCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="47" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C48)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="48" s="3">
+<O>
+<![CDATA[单台件数(件/台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="48" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C44 / C48]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="48" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=AVERAGE(C49)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="0" r="49" cs="2" s="1">
+<O t="BiasTextPainter">
+<IsBackSlash value="false"/>
+<![CDATA[班组|月度]]></O>
+<Expand/>
+</C>
+<C c="2" r="49" s="2">
+<O t="DSColumn">
+<Attributes dsName="08" columnName="ORGNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="49" s="2">
+<O>
+<![CDATA[小计]]></O>
+<Expand/>
+</C>
+<C c="0" r="50" rs="6" s="2">
+<O>
+<![CDATA[八月]]></O>
+<Expand/>
+</C>
+<C c="1" r="50" s="3">
+<O>
+<![CDATA[件数(件)]]></O>
+<Expand/>
+</C>
+<C c="2" r="50" s="4">
+<O t="DSColumn">
+<Attributes dsName="08" columnName="faultCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&bId="+$bId+"&dId="+$dId+"&month=08"+"&teamName="+C50+"&years="+$years+"&faultType="+$faultType+"&faultTypeName="+$faultTypeName]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="title"/>
+<O>
+<![CDATA[统计明细]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jczl/faultAnalysis/faultAnalysis_detail_byMonth.cpt]]></O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false" up="C50"/>
+</C>
+<C c="3" r="50" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C51)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="51" s="3">
+<O>
+<![CDATA[件数比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="51" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C51 / D51]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="3" r="51" s="5">
+<O>
+<![CDATA[]]></O>
+<Expand/>
+</C>
+<C c="1" r="52" s="3">
+<O>
+<![CDATA[同比上月增减数]]></O>
+<Expand/>
+</C>
+<C c="2" r="52" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C51 - C44]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="52" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=D51-D44]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="1" r="53" s="3">
+<O>
+<![CDATA[同比上月增减比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="53" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(C44==0,C51-C44,(C51-C44)/C44)]]></Attributes>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="53" s="5">
+<Expand/>
+</C>
+<C c="1" r="54" s="3">
+<O>
+<![CDATA[台数(台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="54" s="5">
+<O t="DSColumn">
+<Attributes dsName="08" columnName="trainCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="54" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C55)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="55" s="3">
+<O>
+<![CDATA[单台件数(件/台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="55" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C51 / C55]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="55" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=AVERAGE(C56)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="0" r="56" cs="2" s="1">
+<O t="BiasTextPainter">
+<IsBackSlash value="false"/>
+<![CDATA[班组|月度]]></O>
+<Expand/>
+</C>
+<C c="2" r="56" s="2">
+<O t="DSColumn">
+<Attributes dsName="09" columnName="ORGNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="56" s="2">
+<O>
+<![CDATA[小计]]></O>
+<Expand/>
+</C>
+<C c="0" r="57" rs="6" s="2">
+<O>
+<![CDATA[九月]]></O>
+<Expand/>
+</C>
+<C c="1" r="57" s="3">
+<O>
+<![CDATA[件数(件)]]></O>
+<Expand/>
+</C>
+<C c="2" r="57" s="4">
+<O t="DSColumn">
+<Attributes dsName="09" columnName="faultCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&bId="+$bId+"&dId="+$dId+"&month=09"+"&teamName="+C57+"&years="+$years+"&faultType="+$faultType+"&faultTypeName="+$faultTypeName]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="title"/>
+<O>
+<![CDATA[统计明细]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jczl/faultAnalysis/faultAnalysis_detail_byMonth.cpt]]></O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false" up="C57"/>
+</C>
+<C c="3" r="57" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C58)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="58" s="3">
+<O>
+<![CDATA[件数比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="58" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C58 / D58]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="3" r="58" s="5">
+<O>
+<![CDATA[]]></O>
+<Expand/>
+</C>
+<C c="1" r="59" s="3">
+<O>
+<![CDATA[同比上月增减数]]></O>
+<Expand/>
+</C>
+<C c="2" r="59" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C58 - C51]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="59" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=D58-D51]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="1" r="60" s="3">
+<O>
+<![CDATA[同比上月增减比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="60" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(C51==0,C58-C51,(C58-C51)/C51)]]></Attributes>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="60" s="5">
+<Expand/>
+</C>
+<C c="1" r="61" s="3">
+<O>
+<![CDATA[台数(台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="61" s="5">
+<O t="DSColumn">
+<Attributes dsName="09" columnName="trainCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="61" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C62)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="62" s="3">
+<O>
+<![CDATA[单台件数(件/台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="62" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C58 / C62]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="62" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=AVERAGE(C63)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="0" r="63" cs="2" s="1">
+<O t="BiasTextPainter">
+<IsBackSlash value="false"/>
+<![CDATA[班组|月度]]></O>
+<Expand/>
+</C>
+<C c="2" r="63" s="2">
+<O t="DSColumn">
+<Attributes dsName="10" columnName="ORGNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="63" s="2">
+<O>
+<![CDATA[小计]]></O>
+<Expand/>
+</C>
+<C c="0" r="64" rs="6" s="2">
+<O>
+<![CDATA[十月]]></O>
+<Expand/>
+</C>
+<C c="1" r="64" s="3">
+<O>
+<![CDATA[件数(件)]]></O>
+<Expand/>
+</C>
+<C c="2" r="64" s="4">
+<O t="DSColumn">
+<Attributes dsName="10" columnName="faultCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&bId="+$bId+"&dId="+$dId+"&month=10"+"&teamName="+C64+"&years="+$years+"&faultType="+$faultType+"&faultTypeName="+$faultTypeName]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="title"/>
+<O>
+<![CDATA[统计明细]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jczl/faultAnalysis/faultAnalysis_detail_byMonth.cpt]]></O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false" up="C64"/>
+</C>
+<C c="3" r="64" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C65)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="65" s="3">
+<O>
+<![CDATA[件数比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="65" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C65 / D65]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="3" r="65" s="5">
+<O>
+<![CDATA[]]></O>
+<Expand/>
+</C>
+<C c="1" r="66" s="3">
+<O>
+<![CDATA[同比上月增减数]]></O>
+<Expand/>
+</C>
+<C c="2" r="66" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C65 - C58]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="66" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=D65-D58]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="1" r="67" s="3">
+<O>
+<![CDATA[同比上月增减比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="67" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(C58==0,C65-C58,(C65-C58)/C58)]]></Attributes>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="67" s="5">
+<Expand/>
+</C>
+<C c="1" r="68" s="3">
+<O>
+<![CDATA[台数(台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="68" s="5">
+<O t="DSColumn">
+<Attributes dsName="10" columnName="trainCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="68" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C69)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="69" s="3">
+<O>
+<![CDATA[单台件数(件/台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="69" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C65 / C69]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="69" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=AVERAGE(C70)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="0" r="70" cs="2" s="1">
+<O t="BiasTextPainter">
+<IsBackSlash value="false"/>
+<![CDATA[班组|月度]]></O>
+<Expand/>
+</C>
+<C c="2" r="70" s="2">
+<O t="DSColumn">
+<Attributes dsName="11" columnName="ORGNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="70" s="2">
+<O>
+<![CDATA[小计]]></O>
+<Expand/>
+</C>
+<C c="0" r="71" rs="6" s="2">
+<O>
+<![CDATA[十一月]]></O>
+<Expand/>
+</C>
+<C c="1" r="71" s="3">
+<O>
+<![CDATA[件数(件)]]></O>
+<Expand/>
+</C>
+<C c="2" r="71" s="4">
+<O t="DSColumn">
+<Attributes dsName="11" columnName="faultCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&bId="+$bId+"&dId="+$dId+"&month=11"+"&teamName="+C71+"&years="+$years+"&faultType="+$faultType+"&faultTypeName="+$faultTypeName]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="title"/>
+<O>
+<![CDATA[统计明细]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jczl/faultAnalysis/faultAnalysis_detail_byMonth.cpt]]></O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false" up="C71"/>
+</C>
+<C c="3" r="71" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C72)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="72" s="3">
+<O>
+<![CDATA[件数比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="72" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C72 / D72]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="3" r="72" s="5">
+<O>
+<![CDATA[]]></O>
+<Expand/>
+</C>
+<C c="1" r="73" s="3">
+<O>
+<![CDATA[同比上月增减数]]></O>
+<Expand/>
+</C>
+<C c="2" r="73" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C72 - C65]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="73" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=D72-D65]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="1" r="74" s="3">
+<O>
+<![CDATA[同比上月增减比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="74" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(C65==0,C72-C65,(C72-C65)/C65)]]></Attributes>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="74" s="5">
+<Expand/>
+</C>
+<C c="1" r="75" s="3">
+<O>
+<![CDATA[台数(台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="75" s="5">
+<O t="DSColumn">
+<Attributes dsName="11" columnName="trainCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="75" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C76)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="76" s="3">
+<O>
+<![CDATA[单台件数(件/台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="76" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C72 / C76]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="76" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=AVERAGE(C77)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="0" r="77" cs="2" s="1">
+<O t="BiasTextPainter">
+<IsBackSlash value="false"/>
+<![CDATA[班组|月度]]></O>
+<Expand/>
+</C>
+<C c="2" r="77" s="2">
+<O t="DSColumn">
+<Attributes dsName="12" columnName="ORGNAME"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="77" s="2">
+<O>
+<![CDATA[小计]]></O>
+<Expand/>
+</C>
+<C c="0" r="78" rs="6" s="2">
+<O>
+<![CDATA[十二月]]></O>
+<Expand/>
+</C>
+<C c="1" r="78" s="3">
+<O>
+<![CDATA[件数(件)]]></O>
+<Expand/>
+</C>
+<C c="2" r="78" s="4">
+<O t="DSColumn">
+<Attributes dsName="12" columnName="faultCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<NameJavaScriptGroup>
+<NameJavaScript name="网页链接1">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<JavaScript class="com.fr.base.js.WebHyperlink">
+<Parameters>
+<Parameter>
+<Attributes name="param"/>
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[="&bId="+$bId+"&dId="+$dId+"&month=12"+"&teamName="+C78+"&years="+$years+"&faultType="+$faultType+"&faultTypeName="+$faultTypeName]]></Attributes>
+</O>
+</Parameter>
+<Parameter>
+<Attributes name="title"/>
+<O>
+<![CDATA[统计明细]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="url"/>
+<O>
+<![CDATA[/jczl/faultAnalysis/faultAnalysis_detail_byMonth.cpt]]></O>
+</Parameter>
+</Parameters>
+<TargetFrame>
+<![CDATA[_blank]]></TargetFrame>
+<Features width="600" height="400"/>
+<URL>
+<![CDATA[/${ctx}/jsp/jx/common/report.jsp]]></URL>
+<CJK>
+<![CDATA[false]]></CJK>
+</JavaScript>
+</JavaScript>
+</NameJavaScript>
+</NameJavaScriptGroup>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false" up="C78"/>
+</C>
+<C c="3" r="78" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C79)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="79" s="3">
+<O>
+<![CDATA[件数比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="79" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C79 / D79]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="3" r="79" s="5">
+<O>
+<![CDATA[]]></O>
+<Expand/>
+</C>
+<C c="1" r="80" s="3">
+<O>
+<![CDATA[同比上月增减数]]></O>
+<Expand/>
+</C>
+<C c="2" r="80" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C79 - C72]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="80" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=D79-D72]]></Attributes>
+</O>
+<Expand leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="1" r="81" s="3">
+<O>
+<![CDATA[同比上月增减比例]]></O>
+<Expand/>
+</C>
+<C c="2" r="81" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=IF(C72==0,C79-C72,(C79-C72)/C72)]]></Attributes>
+</O>
+<Expand dir="1" upParentDefault="false"/>
+</C>
+<C c="3" r="81" s="5">
+<Expand/>
+</C>
+<C c="1" r="82" s="3">
+<O>
+<![CDATA[台数(台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="82" s="5">
+<O t="DSColumn">
+<Attributes dsName="12" columnName="trainCount"/>
+<Complex/>
+<RG class="com.fr.report.cellattr.core.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="82" s="5">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=SUM(C83)]]></Attributes>
+</O>
+<Expand/>
+</C>
+<C c="1" r="83" s="3">
+<O>
+<![CDATA[单台件数(件/台)]]></O>
+<Expand/>
+</C>
+<C c="2" r="83" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C79 / C83]]></Attributes>
+</O>
+<Expand dir="1" leftParentDefault="false" upParentDefault="false"/>
+</C>
+<C c="3" r="83" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=AVERAGE(C84)]]></Attributes>
+</O>
+<Expand/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<Margin top="986400" left="2743200" bottom="986400" right="2743200"/>
+</PaperSetting>
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+</ReportAttrSet>
+</Report>
+<ReportParameterAttr>
+<Attributes showWindow="true" delayPlaying="true" windowPosition="1" align="0"/>
+<PWTitle>
+<![CDATA[参数]]></PWTitle>
+</ReportParameterAttr>
+<StyleList>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="96"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="80"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="2" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72" foreground="-16776961" underline="1"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<Format class="java.text.DecimalFormat">
+<![CDATA[#0%]]></Format>
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<Format class="java.text.DecimalFormat">
+<![CDATA[#0.00]]></Format>
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+</WorkBook>

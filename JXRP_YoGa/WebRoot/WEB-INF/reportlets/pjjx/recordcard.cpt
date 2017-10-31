@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20120529" releaseVersion="7.0.0">
+<TableDataMap>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Parameters/>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[SELECT A.Record_Name||'PC表' AS Record_Name, B.UNLOAD_TRAINTYPE, B.UNLOAD_TRAINNO, B.UNLOAD_REPAIR_CLASS , B.REPAIR_ORGNAME, 
+       B.UNLOAD_TRAINTYPE||'型机车'||B.UNLOAD_REPAIR_CLASS||'修' AS FW,
+       B.PARTS_NO,C.UNLOAD_PLACE, B.UNLOAD_TRAINNO||','||C.UNLOAD_PLACE AS CHWZ,B.REAL_ENDTIME,
+       (select to_char(wm_concat(RECORD.REMARKS)) 
+             from PJJX_Parts_Rdp_Record_Card RECORD
+            where Rdp_Record_IDX = A.IDX AND RECORD_STATUS = 0) REMARKS,
+       (case (select count(1)
+            from PJJX_Parts_Rdp_QR QR
+           where QR.RDP_RECORD_CARD_IDX IN (SELECT IDX FROM PJJX_Parts_Rdp_Record_Card WHERE Rdp_Record_IDX = A.IDX AND RECORD_STATUS = 0)
+             and QR.QC_ITEM_NO = 'ZJ' AND QR.RECORD_STATUS = 0)
+         when 0 then
+          '----'
+         else
+          (select to_char(wm_concat(QR.QR_EMPNAME)) as Check_Person_Name
+             from PJJX_Parts_Rdp_QR QR
+            where QC_ITEM_NO = 'ZJ'
+              and QR.RDP_RECORD_CARD_IDX IN (SELECT IDX FROM PJJX_Parts_Rdp_Record_Card WHERE Rdp_Record_IDX = A.IDX AND RECORD_STATUS = 0)
+              AND QR.RECORD_STATUS = 0)
+       end) as ZJPerson 
+FROM PJJX_Parts_Rdp_Record A, PJJX_PARTS_RDP B , PJWZ_PARTS_ACCOUNT C
+WHERE A.IDX = '${idx}' AND A.RDP_IDX = B.IDX AND B.PARTS_ACCOUNT_IDX = C.IDX
+AND A.RECORD_STATUS = 0 AND B.RECORD_STATUS = 0 AND C.RECORD_STATUS = 0]]></Query>
+</TableData>
+<TableData name="ds2" class="com.fr.data.impl.DBTableData">
+<Parameters/>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[ydreport]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[SELECT T.IDX, T.Repair_Item_Name, T.Repair_Standard, 
+       (select to_char(replace(WMSYS.WM_CONCAT(r.Data_Item_Name || ':' ||
+                                          r.Data_Item_Result),
+                          ',',
+                          ' <br> ')) FROM PJJX_Parts_Rdp_Record_DI R WHERE R.RECORD_STATUS = 0 AND R.RDP_RECORD_RI_IDX = T.IDX) AS repairResult,
+      B.RECORD_CARD_DESC, T.RDP_RECORD_CARD_IDX, B.HANDLE_EMPNAME, 
+      (case (select count(1)
+            from PJJX_Parts_Rdp_QR QR
+           where QR.RDP_RECORD_CARD_IDX = b.idx
+             and QR.QC_ITEM_NO = 'HJ' AND QR.RECORD_STATUS = 0)
+         when 0 then
+          '----'
+         else
+          (select to_char(wm_concat(QR.QR_EMPNAME)) as Check_Person_Name
+             from PJJX_Parts_Rdp_QR QR
+            where QC_ITEM_NO = 'HJ'
+              and QR.RDP_RECORD_CARD_IDX = b.idx AND QR.RECORD_STATUS = 0)
+       end) as HJPerson 
+FROM PJJX_Parts_Rdp_Record_RI T, PJJX_Parts_Rdp_Record_Card B 
+WHERE B.Rdp_Record_IDX = '${idx}'
+AND T.RDP_RECORD_CARD_IDX = B.IDX
+AND T.RECORD_STATUS = 0 AND B.RECORD_STATUS = 0]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<RowHeight defaultValue="723900">
+<![CDATA[723900,723900,723900,723900,723900,800100,876300,952500,1257300,723900,838200,876300,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[647700,1295400,2857500,1790700,2743200,2552700,2971800,3162300,2895600,3086100,3733800,3543300,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="1" r="1" cs="4">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="RECORD_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="10" r="1" cs="4" s="0">
+<O>
+<![CDATA[上铁机记-上检-01-028-2015]]></O>
+<Expand/>
+</C>
+<C c="1" r="2" cs="3" rs="3" s="1">
+<O>
+<![CDATA[上海机车检修段]]></O>
+<Expand dir="1"/>
+</C>
+<C c="4" r="2" cs="3" rs="3" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="RECORD_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="7" r="2" rs="3" s="3">
+<O>
+<![CDATA[适用范围]]></O>
+<Expand/>
+</C>
+<C c="8" r="2" cs="2" rs="3" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="FW"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="10" r="2" s="3">
+<O>
+<![CDATA[版本]]></O>
+<Expand/>
+</C>
+<C c="11" r="2" cs="3" s="4">
+<O>
+<![CDATA[V_0.1]]></O>
+<Expand/>
+</C>
+<C c="10" r="3" s="3">
+<O>
+<![CDATA[编号]]></O>
+<Expand/>
+</C>
+<C c="11" r="3" cs="3" s="4">
+<O>
+<![CDATA[HXD2B-JL-GY-28-1]]></O>
+<Expand/>
+</C>
+<C c="10" r="4" s="3">
+<O>
+<![CDATA[替代]]></O>
+<Expand/>
+</C>
+<C c="11" r="4" cs="3" s="4">
+<Expand/>
+</C>
+<C c="1" r="5" cs="3" s="3">
+<O>
+<![CDATA[使用部门]]></O>
+<Expand/>
+</C>
+<C c="4" r="5" cs="3" s="4">
+<Expand/>
+</C>
+<C c="7" r="5" s="3">
+<O>
+<![CDATA[检修班组]]></O>
+<Expand/>
+</C>
+<C c="8" r="5" cs="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="REPAIR_ORGNAME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="10" r="5" s="3">
+<O>
+<![CDATA[电机编号]]></O>
+<Expand/>
+</C>
+<C c="11" r="5" cs="3" s="5">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="PARTS_NO"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="1" r="6" cs="3" s="3">
+<O>
+<![CDATA[拆下车号、位别]]></O>
+<Expand/>
+</C>
+<C c="4" r="6" cs="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="CHWZ"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="6" r="6" s="3">
+<O>
+<![CDATA[定子编号]]></O>
+<Expand/>
+</C>
+<C c="8" r="6" s="3">
+<O>
+<![CDATA[转子编号]]></O>
+<Expand/>
+</C>
+<C c="9" r="6">
+<Expand/>
+</C>
+<C c="10" r="6" s="3">
+<O>
+<![CDATA[检修日期]]></O>
+<Expand/>
+</C>
+<C c="11" r="6" cs="3" s="5">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="REAL_ENDTIME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="1" r="7" cs="13" s="6">
+<O>
+<![CDATA[检  修  记  录  内  容]]></O>
+<Expand/>
+</C>
+<C c="1" r="8" s="3">
+<O>
+<![CDATA[序号]]></O>
+<Expand/>
+</C>
+<C c="2" r="8" s="3">
+<O>
+<![CDATA[检测区位]]></O>
+<Expand/>
+</C>
+<C c="3" r="8" cs="2" s="3">
+<O>
+<![CDATA[检测项目]]></O>
+<Expand/>
+</C>
+<C c="5" r="8" cs="3" s="3">
+<O>
+<![CDATA[检测标准]]></O>
+<Expand/>
+</C>
+<C c="8" r="8" s="3">
+<O>
+<![CDATA[检具]]></O>
+<Expand/>
+</C>
+<C c="9" r="8" cs="2" s="3">
+<O>
+<![CDATA[检修结果]]></O>
+<Expand/>
+</C>
+<C c="11" r="8" s="3">
+<O>
+<![CDATA[处理情况]]></O>
+<Expand/>
+</C>
+<C c="12" r="8" s="3">
+<O>
+<![CDATA[自检]]></O>
+<Expand/>
+</C>
+<C c="13" r="8" s="3">
+<O>
+<![CDATA[互检]]></O>
+<Expand/>
+</C>
+<C c="1" r="9" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=&C10]]></Attributes>
+</O>
+<Expand leftParentDefault="false" left="C10"/>
+</C>
+<C c="2" r="9" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="RECORD_CARD_DESC"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="3" r="9" cs="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="REPAIR_ITEM_NAME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="5" r="9" cs="3" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="REPAIR_STANDARD"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="8" r="9" s="4">
+<Expand/>
+</C>
+<C c="9" r="9" cs="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="REPAIRRESULT"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="11" r="9" s="4">
+<Expand/>
+</C>
+<C c="12" r="9" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="HANDLE_EMPNAME"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="13" r="9" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="HJPERSON"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="1" r="10" cs="3" s="3">
+<O>
+<![CDATA[备注]]></O>
+<Expand/>
+</C>
+<C c="4" r="10" cs="10" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="REMARKS"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="1" r="11" cs="3" s="3">
+<O>
+<![CDATA[质检]]></O>
+<Expand/>
+</C>
+<C c="4" r="11" cs="10" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="ZJPERSON"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<Expand dir="0"/>
+</C>
+<C c="7" r="14" s="8">
+<Expand/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<Margin top="986400" left="2743200" bottom="986400" right="2743200"/>
+</PaperSetting>
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+</ReportAttrSet>
+</Report>
+<StyleList>
+<Style horizontal_alignment="4" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="104"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="1" size="104"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="96"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="2" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="88"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="1" size="72"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+</StyleList>
+</WorkBook>
